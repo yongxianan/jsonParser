@@ -17,21 +17,7 @@ void tearDown(void)
 {
 }
 
-void test_createJson_for_new_object(void){
-  Json *object=createJson(OBJECT_TYPE);
-  TEST_ASSERT_EQUAL(0,object->list.count);
-  TEST_ASSERT_EQUAL(OBJECT_TYPE,object->type);
-  TEST_ASSERT_EQUAL(NULL,object->list.head);
-  TEST_ASSERT_EQUAL(NULL,object->list.tail);
-}
 
-void test_createJson_for_new_array(void){
-  Json *object=createJson(ARRAY_TYPE);
-  TEST_ASSERT_EQUAL(0,object->list.count);
-  TEST_ASSERT_EQUAL(ARRAY_TYPE,object->type);
-  TEST_ASSERT_EQUAL(NULL,object->list.head);
-  TEST_ASSERT_EQUAL(NULL,object->list.tail);
-}
 /*
 void test_given_empty_object(void){
   CEXCEPTION_T e;

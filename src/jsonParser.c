@@ -3,16 +3,9 @@
 #include "Error.h"
 #include "Exception.h"
 
-Json *createJson(JsonType whatJsonType){
-  Json *newJson=(Json *)malloc(sizeof(Json));
-  newJson->type=whatJsonType;
-  (newJson->list).head=NULL;
-  (newJson->list).tail=NULL;
-  (newJson->list).count=0;
-  return newJson;
-}
 
 
+/*
 void simpleJsonParser(Tokenizer *tokenizer,LinkedList *object){
   Token *token;
   char operator;
@@ -25,7 +18,7 @@ void simpleJsonParser(Tokenizer *tokenizer,LinkedList *object){
   }
   freeToken(token);
   
-  Json *object=createJson(OBJECT_TYPE);
+  //Json *object=createJson(OBJECT_TYPE);
   
   token=getToken(tokenizer);
   if((token->type == TOKEN_OPERATOR_TYPE) && (((OperatorToken *)token)->str[0]=='}')){
@@ -58,3 +51,4 @@ void simpleJsonParser(Tokenizer *tokenizer,LinkedList *object){
   }
   freeToken(token);
 }
+*/

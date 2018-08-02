@@ -3,6 +3,18 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+
+Json *createJson(JsonType whatJsonType){
+  Json *newJson=(Json *)malloc(sizeof(Json));
+  newJson->type=whatJsonType;
+  (newJson->list).head=NULL;
+  (newJson->list).tail=NULL;
+  (newJson->list).count=0;
+  return newJson;
+}
+
+
+
 linkedListAddToHead(LinkedList *list, ListItem *itemToAdd){
   ListItem *tempItem=itemToAdd;
   if(list->head == NULL && list->tail == NULL){
@@ -38,7 +50,6 @@ linkedListAddToTail(LinkedList *list, ListItem *itemToAdd){
 }
 
 
-
 JsonElement *createJsonElement(char *dataName, void *jsonEntity){
   JsonElement *tempElement=(JsonElement *)malloc(sizeof(JsonElement));
   tempElement->type=ELEMENT_TYPE;
@@ -51,7 +62,7 @@ JsonElement *createJsonElement(char *dataName, void *jsonEntity){
 JsonNumber *createJsonNumber(double doubledata){
   JsonNumber *tempNumber=(JsonNumber *)malloc(sizeof(JsonNumber));
   tempNumber->type=NUMBER_TYPE;
-  tempNumber->number=doubleData;
+  tempNumber->number=doubledata;
   return tempNumber;
 }
 
@@ -69,8 +80,15 @@ JsonBoolean *createJsonBoolean(BOOLEANS booleanData){
   return tempBoolean;
 }
 
+addElementIntoObject(Json *object,JsonElement *element){
+  ListItem *tempItem=(ListItem *)malloc(sizeof(ListItem));
+  tempItem->data=(void *)element;
+  
+  linkedListAddToTail(&(object->list),tempItem);
+}
+
 /*
-createdListItemWithBooleanType(Json *object,JsonType datatype,char *dataName,BOOLEANS data){
+createdListItemWithBooleanType(LinkedList *list,JsonType datatype,char *dataName,BOOLEANS data){
   ListItem *tempItem=(ListItem *)malloc(sizeof(ListItem));
   
   JsonBoolean *tempBoolean=(JsonBoolean *)malloc(sizeof(JsonBoolean));
