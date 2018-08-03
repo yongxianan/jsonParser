@@ -1,22 +1,9 @@
 #ifndef _LINKEDLIST_H
 #define _LINKEDLIST_H
 
+#include "Tokenizer.h"
 
-typedef enum {
-  ELEMENT_TYPE,
-  OBJECT_TYPE,
-  BOOLEAN_TYPE,
-  NUMBER_TYPE,
-  ARRAY_TYPE,
-  STRING_TYPE,
-} JsonType;
-
-typedef enum {
-  TRUE,
-  FALSE,
-}BOOLEANS;
-
-
+///////////////linkedlist component//////////////////
 typedef struct ListItem ListItem;
 struct ListItem{
   ListItem *next;
@@ -31,6 +18,22 @@ struct LinkedList{
   ListItem *tail;
   int count;
 };
+////////////////////////////////////////////////////////
+
+//////////////////////structure for Json///////////////////
+typedef enum {
+  ELEMENT_TYPE,
+  OBJECT_TYPE,
+  BOOLEAN_TYPE,
+  NUMBER_TYPE,
+  ARRAY_TYPE,
+  STRING_TYPE,
+} JsonType;
+
+typedef enum {
+  TRUE,
+  FALSE,
+}BOOLEANS;
 
 typedef struct Json Json;
 struct Json{
@@ -44,6 +47,9 @@ struct JsonElement{
   char *name;
   void *value;
 };
+/////////////////////////////////////////////////////////////////////////////////
+
+//////////////////struct for different data///////////////////////////////////////////////////
 //1.double
 typedef struct JsonNumber JsonNumber;
 struct JsonNumber{
@@ -56,21 +62,29 @@ struct JsonBoolean{
   JsonType type;
   BOOLEANS boolean;
 };
-//4.array
+//3.array
 typedef struct JsonArray JsonArray;
 struct JsonArray{
   JsonType type;
-  char array[];
+  void *array[];
 };
-//3.string
+//4.string
 typedef struct JsonString JsonString;
 struct JsonString{
   JsonType type;
   char *string;
 };
+//////////////////////////////////////////////////////////////////////////
 
+Json *createJson(JsonType whatJsonType);
 void linkedListAddToHead(LinkedList *list, ListItem *itemToAdd);
 void linkedListAddToTail(LinkedList *list, ListItem *itemToAdd);
-ListItem *linkedListRemoveFromHead(LinkedList *list);
-ListItem *linkedListRemoveFromTail(LinkedList *list);
+JsonElement *createJsonElement(char *dataName, void *jsonEntity);
+JsonNumber *createJsonNumber(double doubledata);
+JsonString *createJsonString(char *stringData);
+JsonBoolean *createJsonBoolean(BOOLEANS booleanData);
+void addElementIntoObject(Json *object,JsonElement *element);
+
+//ListItem *linkedListRemoveFromHead(LinkedList *list);
+//ListItem *linkedListRemoveFromTail(LinkedList *list);
 #endif // _LINKEDLIST_H

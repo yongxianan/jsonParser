@@ -14,35 +14,38 @@ Json *createJson(JsonType whatJsonType){
 }
 
 
-
 linkedListAddToHead(LinkedList *list, ListItem *itemToAdd){
   ListItem *tempItem=itemToAdd;
   if(list->head == NULL && list->tail == NULL){
     (list->head) = tempItem;
     (list->tail) = tempItem;
+    tempItem->next=NULL;
     (list->count) = (list->count)+1;
   }
   else{
+    /*
     while(tempItem->next!=NULL){
       tempItem=tempItem->next;
     }
+    */
     tempItem->next=list->head;
     list->head=itemToAdd;
     (list->count) = (list->count)+1;
   }
 }
 
+
+
 linkedListAddToTail(LinkedList *list, ListItem *itemToAdd){
+  int i=0;
   ListItem *tempItem=itemToAdd;
   if(list->head == NULL && list->tail == NULL){
     (list->head) = tempItem;
     (list->tail) = tempItem;
+    tempItem->next=NULL;
     (list->count) = (list->count)+1;
   }
   else{
-    while(tempItem->next!=NULL){
-      tempItem=tempItem->next;
-    }
     list->tail->next=itemToAdd;
     list->tail=tempItem;
     (list->count) = (list->count)+1;
@@ -55,7 +58,7 @@ JsonElement *createJsonElement(char *dataName, void *jsonEntity){
   tempElement->type=ELEMENT_TYPE;
   tempElement->name=dataName;
   tempElement->value=jsonEntity;
-  
+
   return tempElement;
 }
 
@@ -80,64 +83,45 @@ JsonBoolean *createJsonBoolean(BOOLEANS booleanData){
   return tempBoolean;
 }
 
+
+/*
+    try to make use of function like:
+    JsonNumber *createJsonNumber(double doubledata);
+    JsonString *createJsonString(char *stringData);
+    JsonBoolean *createJsonBoolean(BOOLEANS booleanData);
+    to create array that can take in any type of data
+    note: array use the exact same structure
+          (include type and linkedlist) as object
+*/
+addJsonEntityToArray(Json *array, void *jsonEntity){
+  ListItem *tempItem=(ListItem *)malloc(sizeof(ListItem));
+  tempItem->data=(void *)jsonEntity;
+  linkedListAddToTail(&(array->list), tempItem);
+}
+
+
+//this add element to object
 addElementIntoObject(Json *object,JsonElement *element){
   ListItem *tempItem=(ListItem *)malloc(sizeof(ListItem));
   tempItem->data=(void *)element;
-  
+
   linkedListAddToTail(&(object->list),tempItem);
 }
 
-/*
-createdListItemWithBooleanType(LinkedList *list,JsonType datatype,char *dataName,BOOLEANS data){
-  ListItem *tempItem=(ListItem *)malloc(sizeof(ListItem));
-  
-  JsonBoolean *tempBoolean=(JsonBoolean *)malloc(sizeof(JsonBoolean));
-  tempBoolean->type=datatype;
-  tempBoolean->boolean=data;
-  
-  JsonElement *tempElement=(JsonElement *)malloc(sizeof(JsonElement));
-  tempElement->type=ELEMENT_TYPE;
-  tempElement->name=dataName;
-  tempElement->value=tempBoolean;
-  
-  tempItem->data=(void *)tempElement;
-  
-  linkedListAddToTail(list, tempItem);
+addNameAndStringIntoObject(char *name,char *stringData,Json *object){
+  JsonString *data=createJsonString(stringData);
+  JsonElement *element=createJsonElement(name, (void *)data);
+  addElementIntoObject(object,element);
 }
 
-
-createdListItemWithFloatingType(LinkedList *list,JsonType datatype,char *dataName,double data){
-  ListItem *tempItem=(ListItem *)malloc(sizeof(ListItem));
-  
-  JsonNumber *tempNumber=(JsonNumber *)malloc(sizeof(JsonNumber));
-  tempNumber->type=datatype;
-  tempNumber->number=data;
-  
-  JsonElement *tempElement=(JsonElement *)malloc(sizeof(JsonElement));
-  tempElement->type=ELEMENT_TYPE;
-  tempElement->name=dataName;
-  tempElement->value=tempNumber;
-  
-  tempItem->data=(void *)tempElement;
-  
-  linkedListAddToTail(list, tempItem);
+addNameAndNumberIntoObject(char *name,double numbers,Json *object){
+  JsonNumber *data=createJsonNumber(numbers);
+  JsonElement *element=createJsonElement(name, (void *)data);
+  addElementIntoObject(object,element);
 }
 
-
-createdListItemWithStringType(LinkedList *list,JsonType datatype,char *dataName,char *data){
-  ListItem *tempItem=(ListItem *)malloc(sizeof(ListItem));
-  
-  JsonString *tempString=(JsonString *)malloc(sizeof(JsonString));
-  tempString->type=datatype;
-  tempString->string=data;
-  
-  JsonElement *tempElement=(JsonElement *)malloc(sizeof(JsonElement));
-  tempElement->type=ELEMENT_TYPE;
-  tempElement->name=dataName;
-  tempElement->value=tempString;
-  
-  tempItem->data=(void *)tempElement;
-  
-  linkedListAddToTail(list, tempItem);
+addNameAndBooleanIntoObject(char *name,BOOLEANS booleanData,Json *object){
+  JsonBoolean *data=createJsonBoolean(booleanData);
+  JsonElement *element=createJsonElement(name, (void *)data);
+  addElementIntoObject(object,element);
 }
-*/
