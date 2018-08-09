@@ -2,6 +2,7 @@
 #include "linkedlist.h"
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 
 Json *createJson(JsonType whatJsonType){
@@ -56,7 +57,9 @@ linkedListAddToTail(LinkedList *list, ListItem *itemToAdd){
 JsonElement *createJsonElement(char *dataName, void *jsonEntity){
   JsonElement *tempElement=(JsonElement *)malloc(sizeof(JsonElement));
   tempElement->type=ELEMENT_TYPE;
-  tempElement->name=dataName;
+  tempElement->name=(char *)malloc(strlen(dataName)+1);
+  strcpy(tempElement->name,dataName);
+  //tempElement->name=dataName;
   tempElement->value=jsonEntity;
 
   return tempElement;
@@ -72,7 +75,9 @@ JsonNumber *createJsonNumber(double doubledata){
 JsonString *createJsonString(char *stringData){
   JsonString *tempString=(JsonString *)malloc(sizeof(JsonString));
   tempString->type=STRING_TYPE;
-  tempString->string=stringData;
+  tempString->string=(char *)malloc(strlen(stringData)+1);
+  strcpy(tempString->string,stringData);
+  //tempString->string=stringData;
   return tempString;
 }
 
@@ -98,6 +103,7 @@ addJsonEntityToArray(Json *array, void *jsonEntity){
   tempItem->data=(void *)jsonEntity;
   linkedListAddToTail(&(array->list), tempItem);
 }
+
 
 
 //this add element to object

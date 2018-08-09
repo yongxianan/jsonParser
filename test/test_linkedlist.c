@@ -101,24 +101,24 @@ void test_createJsonString___hello_____(void){
   char *str="hello";
   JsonString *newJsonString=createJsonString(str);
   TEST_ASSERT_EQUAL(STRING_TYPE,newJsonString->type);
-  TEST_ASSERT_EQUAL("hello",newJsonString->string);
+  TEST_ASSERT_EQUAL_STRING("hello",newJsonString->string);
 }
 
-void test_createJsonBoolean___TRUE_____(void){
-  BOOLEANS boolean=TRUE;
+void test_createJsonBoolean___true_____(void){
+  BOOLEANS boolean=true;
   JsonBoolean *newJsonBoolean=createJsonBoolean(boolean);
   TEST_ASSERT_EQUAL(BOOLEAN_TYPE,newJsonBoolean->type);
-  TEST_ASSERT_EQUAL(TRUE,newJsonBoolean->boolean);
+  TEST_ASSERT_EQUAL(true,newJsonBoolean->boolean);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//insert array[0]=123.123 , array[1]="string" , array[2]=FALSE
+//insert array[0]=123.123 , array[1]="string" , array[2]=false
 
-void test_addJsonEntityToArray_____123point123____string_______FALSE_____(void){
+void test_addJsonEntityToArray_____123point123____string_______false_____(void){
 
   JsonNumber newJsonNumber={.type=NUMBER_TYPE,.number=123.123};
   JsonString newJsonString={.type=STRING_TYPE,.string="merry christmas"};
-  JsonBoolean newJsonBoolean={.type=BOOLEAN_TYPE,.boolean=FALSE};
+  JsonBoolean newJsonBoolean={.type=BOOLEAN_TYPE,.boolean=false};
 
   Json *array=createJson(ARRAY_TYPE);
 
@@ -133,7 +133,36 @@ void test_addJsonEntityToArray_____123point123____string_______FALSE_____(void){
   TEST_ASSERT_EQUAL(STRING_TYPE,((JsonString *)((array->list.head)->next->data))->type);
   TEST_ASSERT_EQUAL_STRING("merry christmas",((JsonString *)((array->list.head)->next->data))->string);
   TEST_ASSERT_EQUAL(BOOLEAN_TYPE,((JsonBoolean *)((array->list.head)->next->next->data))->type);
-  TEST_ASSERT_EQUAL(FALSE,((JsonBoolean *)((array->list.head)->next->next->data))->boolean);
+  TEST_ASSERT_EQUAL(false,((JsonBoolean *)((array->list.head)->next->next->data))->boolean);
+
+}
+
+void test_createJsonElement_for_array__________123point123____string_______false_____(void){
+  char *dataName="array with number, boolean, string";
+  JsonNumber newJsonNumber={.type=NUMBER_TYPE,.number=123.123};
+  JsonString newJsonString={.type=STRING_TYPE,.string="merry christmas"};
+  JsonBoolean newJsonBoolean={.type=BOOLEAN_TYPE,.boolean=false};
+
+  Json *array=createJson(ARRAY_TYPE);
+
+  addJsonEntityToArray(array, (void *)(&newJsonNumber));
+  addJsonEntityToArray(array, (void *)(&newJsonString));
+  addJsonEntityToArray(array, (void *)(&newJsonBoolean));
+
+  JsonElement *element=createJsonElement("array with number, boolean, string", (void *)(array));
+  TEST_ASSERT_EQUAL(STRING_TYPE,((JsonString *)((array->list.head)->next->data))->type);
+
+  TEST_ASSERT_EQUAL(ELEMENT_TYPE,element->type);
+
+  TEST_ASSERT_EQUAL(ARRAY_TYPE,((Json *)(element->value))->type);
+  TEST_ASSERT_EQUAL(3,((Json *)(element->value))->list.count);
+  TEST_ASSERT_EQUAL(NUMBER_TYPE,((JsonNumber *)(((Json *)(element->value))->list.head->data))->type);
+  TEST_ASSERT_EQUAL(123.123,((JsonNumber *)(((Json *)(element->value))->list.head->data))->number);
+
+  TEST_ASSERT_EQUAL(STRING_TYPE,((JsonString *)(((Json *)(element->value))->list.head->next->data))->type);
+  TEST_ASSERT_EQUAL_STRING("merry christmas",((JsonString *)(((Json *)(element->value))->list.head->next->data))->string);
+  TEST_ASSERT_EQUAL(BOOLEAN_TYPE,((JsonBoolean *)(((Json *)(element->value))->list.head->next->next->data))->type);
+  TEST_ASSERT_EQUAL(false,((JsonBoolean *)(((Json *)(element->value))->list.head->next->next->data))->boolean);
 
 }
 
@@ -158,15 +187,51 @@ void test_createJsonElement_______string_hello______(void){
   TEST_ASSERT_EQUAL("string",((JsonString *)(element->value))->string);
 }
 
-void test_createJsonElement_______boolean_TRUE______(void){
+void test_createJsonElement_______boolean_true______(void){
   char *dataName="boolean";
-  JsonBoolean newJsonBoolean={.type=BOOLEAN_TYPE,.boolean=TRUE};
+  JsonBoolean newJsonBoolean={.type=BOOLEAN_TYPE,.boolean=true};
   JsonElement *element=createJsonElement(dataName, (void *)(&newJsonBoolean));
   TEST_ASSERT_EQUAL(ELEMENT_TYPE,element->type);
   TEST_ASSERT_EQUAL_STRING("boolean",element->name);
   TEST_ASSERT_EQUAL(BOOLEAN_TYPE,((JsonBoolean *)(element->value))->type);
-  TEST_ASSERT_EQUAL(TRUE,((JsonBoolean *)(element->value))->boolean);
+  TEST_ASSERT_EQUAL(true,((JsonBoolean *)(element->value))->boolean);
 }
+
+
+void test_addElementIntoObject_for_array______123point123____string_______false_____(void){
+  Json object = {.type=OBJECT_TYPE, .list.head=NULL, .list.tail=NULL, .list.count=0};
+  char *dataName="array with number, boolean, string";
+  JsonNumber newJsonNumber={.type=NUMBER_TYPE,.number=123.123};
+  JsonString newJsonString={.type=STRING_TYPE,.string="merry christmas"};
+  JsonBoolean newJsonBoolean={.type=BOOLEAN_TYPE,.boolean=false};
+
+  Json *array=createJson(ARRAY_TYPE);
+
+  addJsonEntityToArray(array, (void *)(&newJsonNumber));
+  addJsonEntityToArray(array, (void *)(&newJsonString));
+  addJsonEntityToArray(array, (void *)(&newJsonBoolean));
+
+  JsonElement *element=createJsonElement("array with number, boolean, string", (void *)(array));
+  addElementIntoObject(&object,element);
+
+  TEST_ASSERT_EQUAL(STRING_TYPE,((JsonString *)((array->list.head)->next->data))->type);
+
+  TEST_ASSERT_EQUAL(ELEMENT_TYPE,((JsonElement *)(object.list.head->data))->type);
+
+  TEST_ASSERT_EQUAL(ARRAY_TYPE,((Json *)(((JsonElement *)(object.list.head->data))->value))->type);
+  TEST_ASSERT_EQUAL(3,((Json *)(((JsonElement *)(object.list.head->data))->value))->list.count);
+
+  TEST_ASSERT_EQUAL(NUMBER_TYPE,((JsonNumber *)(((Json *)(((JsonElement *)(object.list.head->data))->value))->list.head->data))->type);
+  TEST_ASSERT_EQUAL(123.123,((JsonNumber *)(((Json *)(((JsonElement *)(object.list.head->data))->value))->list.head->data))->number);
+
+  TEST_ASSERT_EQUAL(STRING_TYPE,((JsonString *)(((Json *)(((JsonElement *)(object.list.head->data))->value))->list.head->next->data))->type);
+  TEST_ASSERT_EQUAL_STRING("merry christmas",((JsonString *)(((Json *)(((JsonElement *)(object.list.head->data))->value))->list.head->next->data))->string);
+  
+  TEST_ASSERT_EQUAL(BOOLEAN_TYPE,((JsonBoolean *)(((Json *)(((JsonElement *)(object.list.head->data))->value))->list.head->next->next->data))->type);
+  TEST_ASSERT_EQUAL(false,((JsonBoolean *)(((Json *)(((JsonElement *)(object.list.head->data))->value))->list.head->next->next->data))->boolean);
+
+}
+
 
 void test_addElementIntoObject_______string_hello_________(void){
   char *dataName="string";
@@ -183,9 +248,9 @@ void test_addElementIntoObject_______string_hello_________(void){
   TEST_ASSERT_EQUAL_STRING("hello", ((JsonString *)(((JsonElement *)(JsonWithStringHello.list.tail->data))->value))->string);
 }
 
-void test_addElementIntoObject_______bool_test_TRUE_________(void){
+void test_addElementIntoObject_______bool_test_true_________(void){
   char *dataName="bool test";
-  BOOLEANS boolData=TRUE;
+  BOOLEANS boolData=true;
   Json JsonWithBoolTest = {.type=OBJECT_TYPE, .list.head=NULL, .list.tail=NULL, .list.count=0};
   JsonBoolean *newJsonBoolean=createJsonBoolean(boolData);
   JsonElement *newJsonElement=createJsonElement("bool test", (void *)newJsonBoolean);
@@ -195,7 +260,7 @@ void test_addElementIntoObject_______bool_test_TRUE_________(void){
   TEST_ASSERT_EQUAL(ELEMENT_TYPE, ((JsonElement *)(JsonWithBoolTest.list.tail->data))->type);
   TEST_ASSERT_EQUAL_STRING("bool test", ((JsonElement *)(JsonWithBoolTest.list.tail->data))->name);
   TEST_ASSERT_EQUAL(BOOLEAN_TYPE, ((JsonBoolean *)(((JsonElement *)(JsonWithBoolTest.list.tail->data))->value))->type);
-  TEST_ASSERT_EQUAL(TRUE, ((JsonBoolean *)(((JsonElement *)(JsonWithBoolTest.list.tail->data))->value))->boolean);
+  TEST_ASSERT_EQUAL(true, ((JsonBoolean *)(((JsonElement *)(JsonWithBoolTest.list.tail->data))->value))->boolean);
 }
 
 void test_addElementIntoObject_______double_number_22point545454__________(void){
@@ -215,14 +280,14 @@ void test_addElementIntoObject_______double_number_22point545454__________(void)
 
 void test_addNameAndBooleanIntoObject(void){
   char *name="boolean testing";
-  BOOLEANS booleanData=FALSE;
+  BOOLEANS booleanData=false;
   Json object = {.type=OBJECT_TYPE, .list.head=NULL, .list.tail=NULL, .list.count=0};
   addNameAndBooleanIntoObject(name,booleanData,&object);
 
   TEST_ASSERT_EQUAL(ELEMENT_TYPE, ((JsonElement *)(object.list.tail->data))->type);
   TEST_ASSERT_EQUAL_STRING("boolean testing", ((JsonElement *)(object.list.tail->data))->name);
   TEST_ASSERT_EQUAL(BOOLEAN_TYPE, ((JsonBoolean *)(((JsonElement *)(object.list.tail->data))->value))->type);
-  TEST_ASSERT_EQUAL(FALSE, ((JsonBoolean *)(((JsonElement *)(object.list.tail->data))->value))->boolean);
+  TEST_ASSERT_EQUAL(false, ((JsonBoolean *)(((JsonElement *)(object.list.tail->data))->value))->boolean);
 }
 
 void test_addNameAndStringIntoObject(void){
@@ -232,6 +297,8 @@ void test_addNameAndStringIntoObject(void){
 
   addNameAndStringIntoObject(name,stringData,&object);
 
+  TEST_ASSERT_EQUAL(1, object.list.count);
+
   TEST_ASSERT_EQUAL(ELEMENT_TYPE, ((JsonElement *)(object.list.tail->data))->type);
   TEST_ASSERT_EQUAL_STRING("string testing", ((JsonElement *)(object.list.tail->data))->name);
   TEST_ASSERT_EQUAL(STRING_TYPE, ((JsonString *)(((JsonElement *)(object.list.tail->data))->value))->type);
@@ -239,14 +306,24 @@ void test_addNameAndStringIntoObject(void){
 }
 
 void test_addNameAndNumberIntoObject(void){
-  char *name="double_number";
+  char *name1="double_number";
   double numbers=22.545454;
+  char *name2="string testing";
+  char *stringData="what kind of string";
   Json object = {.type=OBJECT_TYPE, .list.head=NULL, .list.tail=NULL, .list.count=0};
 
-  addNameAndNumberIntoObject(name,numbers,&object);
+  addNameAndNumberIntoObject(name1,numbers,&object);
+  addNameAndStringIntoObject(name2,stringData,&object);
+
+  TEST_ASSERT_EQUAL(2, object.list.count);
+
+  TEST_ASSERT_EQUAL(ELEMENT_TYPE, ((JsonElement *)(object.list.head->data))->type);
+  TEST_ASSERT_EQUAL_STRING("double_number", ((JsonElement *)(object.list.head->data))->name);
+  TEST_ASSERT_EQUAL(NUMBER_TYPE, ((JsonNumber *)(((JsonElement *)(object.list.head->data))->value))->type);
+  TEST_ASSERT_EQUAL(22.545454, ((JsonNumber *)(((JsonElement *)(object.list.head->data))->value))->number);
 
   TEST_ASSERT_EQUAL(ELEMENT_TYPE, ((JsonElement *)(object.list.tail->data))->type);
-  TEST_ASSERT_EQUAL_STRING("double_number", ((JsonElement *)(object.list.tail->data))->name);
-  TEST_ASSERT_EQUAL(NUMBER_TYPE, ((JsonNumber *)(((JsonElement *)(object.list.tail->data))->value))->type);
-  TEST_ASSERT_EQUAL(22.545454, ((JsonNumber *)(((JsonElement *)(object.list.tail->data))->value))->number);
+  TEST_ASSERT_EQUAL_STRING("string testing", ((JsonElement *)(object.list.tail->data))->name);
+  TEST_ASSERT_EQUAL(STRING_TYPE, ((JsonString *)(((JsonElement *)(object.list.tail->data))->value))->type);
+  TEST_ASSERT_EQUAL_STRING("what kind of string", ((JsonString *)(((JsonElement *)(object.list.tail->data))->value))->string);
 }

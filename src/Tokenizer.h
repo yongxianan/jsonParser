@@ -24,5 +24,5 @@ void configureTokenizer(Tokenizer *tokenizer, uint32_t configuration);
 Token *advanceToken(Tokenizer *tokenizer);
 Token *getToken(Tokenizer *tokenizer);
 Token *peepToken(Tokenizer *tokenizer);
-
+void pushBackToken(Tokenizer *tokenizer, Token *token);
 #endif // Tokenizer_H

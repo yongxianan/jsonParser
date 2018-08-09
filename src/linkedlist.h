@@ -31,8 +31,8 @@ typedef enum {
 } JsonType;
 
 typedef enum {
-  TRUE,
-  FALSE,
+  true,
+  false,
 }BOOLEANS;
 
 typedef struct Json Json;
@@ -63,11 +63,7 @@ struct JsonBoolean{
   BOOLEANS boolean;
 };
 //3.array
-typedef struct JsonArray JsonArray;
-struct JsonArray{
-  JsonType type;
-  void *array[];
-};
+
 //4.string
 typedef struct JsonString JsonString;
 struct JsonString{
