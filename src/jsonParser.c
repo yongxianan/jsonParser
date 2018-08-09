@@ -17,38 +17,7 @@ BOOLEANS detectBooleanWithDataToken(Token *datatoken){
   }
 }
 
-addAnyDataIntoArrayUsingDataToken(Tokenizer *tokenizer,Json *array){
-  JsonNumber *newJsonNumber;
-  JsonString *newJsonString;
-  JsonBoolean *newJsonBoolean;
-  BOOLEANS booleanData;
-  Token *datatoken=getToken(tokenizer);
-  if(datatoken->type==TOKEN_FLOAT_TYPE){
-    newJsonNumber=createJsonNumber(((FloatToken *)datatoken)->value);
-    addJsonEntityToArray(array, (void *)(newJsonNumber));
-    freeToken(datatoken);
-  }
-  else if(datatoken->type == TOKEN_INTEGER_TYPE){
-    newJsonNumber=createJsonNumber((double)((IntegerToken *)datatoken)->value);
-    addJsonEntityToArray(array, (void *)(newJsonNumber));
-    freeToken(datatoken);
-  }
-  else if(datatoken->type == TOKEN_STRING_TYPE){
-    newJsonString=createJsonString(((StringToken *)datatoken)->str);
-    addJsonEntityToArray(array, (void *)(newJsonString));
-    freeToken(datatoken);
-  }
-  else if(datatoken->type == TOKEN_IDENTIFIER_TYPE){
-    booleanData=detectBooleanWithDataToken(datatoken);
-    newJsonBoolean=createJsonBoolean(booleanData);
-    addJsonEntityToArray(array, (void *)(newJsonBoolean));
-    freeToken(datatoken);
-  }
-  else{
-    throwException(ERR_EXPECTING_COLON, datatoken, "Expect 'string','number','NULL','true','false'.... ");
-  }
 
-}
 
 addElementNameAndArrayIntoObject(char *name,Tokenizer *tokenizer,Json *object){
   Token  *optoken;
@@ -88,6 +57,84 @@ addElementNameAndArrayIntoObject(char *name,Tokenizer *tokenizer,Json *object){
   }
 
 }
+
+addAnyDataIntoArrayUsingDataToken(Tokenizer *tokenizer,Json *array){
+  JsonNumber *newJsonNumber;
+  JsonString *newJsonString;
+  JsonBoolean *newJsonBoolean;
+  BOOLEANS booleanData;
+  Token *datatoken=getToken(tokenizer);
+  if(datatoken->type==TOKEN_FLOAT_TYPE){
+    newJsonNumber=createJsonNumber(((FloatToken *)datatoken)->value);
+    addJsonEntityToArray(array, (void *)(newJsonNumber));
+    freeToken(datatoken);
+  }
+  else if(datatoken->type == TOKEN_INTEGER_TYPE){
+    newJsonNumber=createJsonNumber((double)((IntegerToken *)datatoken)->value);
+    addJsonEntityToArray(array, (void *)(newJsonNumber));
+    freeToken(datatoken);
+  }
+  else if(datatoken->type == TOKEN_STRING_TYPE){
+    newJsonString=createJsonString(((StringToken *)datatoken)->str);
+    addJsonEntityToArray(array, (void *)(newJsonString));
+    freeToken(datatoken);
+  }
+  else if(datatoken->type == TOKEN_IDENTIFIER_TYPE){
+    booleanData=detectBooleanWithDataToken(datatoken);
+    newJsonBoolean=createJsonBoolean(booleanData);
+    addJsonEntityToArray(array, (void *)(newJsonBoolean));
+    freeToken(datatoken);
+  }
+  else{
+    throwException(ERR_EXPECTING_COLON, datatoken, "Expect 'string','number','NULL','true','false'.... ");
+  }
+
+}
+/////////////////////experiment to achiece recursive call/////////////////////////////////////////////////////////
+Json *extractJsonEntityAndPlaceInsideArray(Tokenizer *tokenizer){
+  Token  *optoken;
+  JsonElement *element;
+  Json *array=createJson(ARRAY_TYPE);
+  optoken=getToken(tokenizer);  //detect '['
+  if(((OperatorToken *)optoken)->str[0]=='['){
+    freeToken(optoken);
+    optoken=getToken(tokenizer);  //detect ']' or 'data'
+    if(((OperatorToken *)optoken)->str[0]==']'){
+    }
+    else if()
+    else{
+      pushBackToken(tokenizer, optoken);    //need to push back 'data' for other function
+      addAnyDataIntoArrayUsingDataToken(tokenizer,array);
+      optoken=getToken(tokenizer);    //detect ','
+      while(((OperatorToken *)optoken)->str[0]==','){
+        freeToken(optoken);
+        addAnyDataIntoArrayUsingDataToken(tokenizer,array);
+        optoken=getToken(tokenizer);
+      }
+    }
+  }
+  else{
+    throwException(ERR_EXPECTING_COLON, optoken, "Expect '['  ");
+  }
+
+
+
+  if(((OperatorToken *)optoken)->str[0]==']'){
+    freeToken(optoken);
+
+  }
+  else{
+    throwException(ERR_EXPECTING_COLON, optoken, "Expect ']' , ','  ");
+  }
+}
+/*
+element=createJsonElement(name, (void *)(array));
+addElementIntoObject(object,element);
+*/
+
+/////////////////////////////////////experiment to achiece recursive call///////////////////////////////////////
+
+
 
 addElementAndDataIntoObject(Token *elementtoken,Tokenizer *tokenizer,Json *object){
   Token *datatoken, *token;

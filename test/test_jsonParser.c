@@ -928,6 +928,193 @@ void test_given_2_set_of_data_with_data_type_number_and_string(void){
   freeTokenizer(tokenizer);
 }
 
+void test_given_3_set_of_data_with_data_type___number___boolean___string(void){
+  CEXCEPTION_T e;
+  Token *token;
+  Tokenizer *tokenizer;
+
+  char *jsonText=
+  "{"
+  "  \"age\":23  ,"
+  "  \"boolean\":  true  ,  "
+  "  \"name\":  \"ali baba \"  "
+  "}";
+
+  Try{
+    tokenizer=createTokenizer(jsonText);
+    Json *object=simpleJsonParser(tokenizer);
+
+    TEST_ASSERT_EQUAL(3,object->list.count);
+    TEST_ASSERT_EQUAL(OBJECT_TYPE,object->type);
+
+    TEST_ASSERT_EQUAL(ELEMENT_TYPE,((JsonElement *)(object->list.head->data))->type);
+    TEST_ASSERT_EQUAL_STRING("age",((JsonElement *)(object->list.head->data))->name);
+    TEST_ASSERT_EQUAL(NUMBER_TYPE,((JsonNumber *)(((JsonElement *)(object->list.head->data))->value))->type);
+    TEST_ASSERT_EQUAL(23,((JsonNumber *)(((JsonElement *)(object->list.head->data))->value))->number);
+
+    TEST_ASSERT_EQUAL(ELEMENT_TYPE,((JsonElement *)(object->list.head->next->data))->type);
+    TEST_ASSERT_EQUAL_STRING("boolean",((JsonElement *)(object->list.head->next->data))->name);
+    TEST_ASSERT_EQUAL(BOOLEAN_TYPE,((JsonBoolean *)(((JsonElement *)(object->list.head->next->data))->value))->type);
+    TEST_ASSERT_EQUAL(true,((JsonBoolean *)(((JsonElement *)(object->list.head->next->data))->value))->boolean);
+
+    TEST_ASSERT_EQUAL(ELEMENT_TYPE,((JsonElement *)(object->list.tail->data))->type);
+    TEST_ASSERT_EQUAL_STRING("name",((JsonElement *)(object->list.tail->data))->name);
+    TEST_ASSERT_EQUAL(STRING_TYPE,((JsonString *)(((JsonElement *)(object->list.tail->data))->value))->type);
+    TEST_ASSERT_EQUAL_STRING("ali baba ",((JsonString *)(((JsonElement *)(object->list.tail->data))->value))->string);
+  }
+  Catch(e){
+    dumpTokenErrorMessage(e, 1);
+    TEST_FAIL_MESSAGE("System Error: Don't expect any exception to be thrown!");
+  }
+  freeTokenizer(tokenizer);
+}
+
+void test_given_an_element_with_array___number___boolean___string(void){
+  CEXCEPTION_T e;
+  Token *token;
+  Tokenizer *tokenizer;
+
+  char *jsonText=
+  "{"
+  "  \"age\":23  ,"
+  "  \"boolean\":  true  ,  "
+  "  \"name\":  \"ali baba \" , "
+  "  \"array data test\":  [34.90,\"ali baba\",false]  "
+  "}";
+
+  Try{
+    tokenizer=createTokenizer(jsonText);
+    Json *object=simpleJsonParser(tokenizer);
+
+    TEST_ASSERT_EQUAL(4,object->list.count);
+    TEST_ASSERT_EQUAL(OBJECT_TYPE,object->type);
+
+    TEST_ASSERT_EQUAL(ELEMENT_TYPE,((JsonElement *)(object->list.head->data))->type);
+    TEST_ASSERT_EQUAL_STRING("age",((JsonElement *)(object->list.head->data))->name);
+    TEST_ASSERT_EQUAL(NUMBER_TYPE,((JsonNumber *)(((JsonElement *)(object->list.head->data))->value))->type);
+    TEST_ASSERT_EQUAL(23,((JsonNumber *)(((JsonElement *)(object->list.head->data))->value))->number);
+
+    TEST_ASSERT_EQUAL(ELEMENT_TYPE,((JsonElement *)(object->list.head->next->data))->type);
+    TEST_ASSERT_EQUAL_STRING("boolean",((JsonElement *)(object->list.head->next->data))->name);
+    TEST_ASSERT_EQUAL(BOOLEAN_TYPE,((JsonBoolean *)(((JsonElement *)(object->list.head->next->data))->value))->type);
+    TEST_ASSERT_EQUAL(true,((JsonBoolean *)(((JsonElement *)(object->list.head->next->data))->value))->boolean);
+
+    TEST_ASSERT_EQUAL(ELEMENT_TYPE,((JsonElement *)(object->list.head->next->next->data))->type);
+    TEST_ASSERT_EQUAL_STRING("name",((JsonElement *)(object->list.head->next->next->data))->name);
+    TEST_ASSERT_EQUAL(STRING_TYPE,((JsonString *)(((JsonElement *)(object->list.head->next->next->data))->value))->type);
+    TEST_ASSERT_EQUAL_STRING("ali baba ",((JsonString *)(((JsonElement *)(object->list.head->next->next->data))->value))->string);
+    //array test
+    TEST_ASSERT_EQUAL(ELEMENT_TYPE,((JsonElement *)(object->list.tail->data))->type);
+    TEST_ASSERT_EQUAL_STRING("array data test",((JsonElement *)(object->list.tail->data))->name);
+
+    TEST_ASSERT_EQUAL(ARRAY_TYPE,((Json *)(((JsonElement *)(object->list.tail->data))->value))->type);
+    TEST_ASSERT_EQUAL(3,((Json *)(((JsonElement *)(object->list.tail->data))->value))->list.count);
+
+    TEST_ASSERT_EQUAL(NUMBER_TYPE,((JsonNumber *)(((Json *)(((JsonElement *)(object->list.tail->data))->value))->list.head->data))->type);
+    TEST_ASSERT_EQUAL(34.90,((JsonNumber *)(((Json *)(((JsonElement *)(object->list.tail->data))->value))->list.head->data))->number);
+
+    TEST_ASSERT_EQUAL(STRING_TYPE,((JsonString *)(((Json *)(((JsonElement *)(object->list.tail->data))->value))->list.head->next->data))->type);
+    TEST_ASSERT_EQUAL_STRING("ali baba",((JsonString *)(((Json *)(((JsonElement *)(object->list.tail->data))->value))->list.head->next->data))->string);
+
+    TEST_ASSERT_EQUAL(BOOLEAN_TYPE,((JsonBoolean *)(((Json *)(((JsonElement *)(object->list.tail->data))->value))->list.head->next->next->data))->type);
+    TEST_ASSERT_EQUAL(false,((JsonBoolean *)(((Json *)(((JsonElement *)(object->list.tail->data))->value))->list.head->next->next->data))->boolean);
+
+  }
+  Catch(e){
+    dumpTokenErrorMessage(e, 1);
+    TEST_FAIL_MESSAGE("System Error: Don't expect any exception to be thrown!");
+  }
+  freeTokenizer(tokenizer);
+}
+
+void test_given_an_element_with_array_data___number___boolean___string(void){
+  CEXCEPTION_T e;
+  Token *token;
+  Tokenizer *tokenizer;
+
+  char *jsonText=
+  "{"
+  "  \"array data test\":  [34.90,\"ali baba\",false]  "
+  "}";
+
+  Try{
+    tokenizer=createTokenizer(jsonText);
+    Json *object=simpleJsonParser(tokenizer);
+
+    TEST_ASSERT_EQUAL(1,object->list.count);
+    TEST_ASSERT_EQUAL(OBJECT_TYPE,object->type);
+
+    TEST_ASSERT_EQUAL(ELEMENT_TYPE,((JsonElement *)(object->list.head->data))->type);
+    TEST_ASSERT_EQUAL_STRING("array data test",((JsonElement *)(object->list.head->data))->name);
+
+    TEST_ASSERT_EQUAL(ARRAY_TYPE,((Json *)(((JsonElement *)(object->list.head->data))->value))->type);
+    TEST_ASSERT_EQUAL(3,((Json *)(((JsonElement *)(object->list.head->data))->value))->list.count);
+
+    TEST_ASSERT_EQUAL(NUMBER_TYPE,((JsonNumber *)(((Json *)(((JsonElement *)(object->list.head->data))->value))->list.head->data))->type);
+    TEST_ASSERT_EQUAL(34.90,((JsonNumber *)(((Json *)(((JsonElement *)(object->list.head->data))->value))->list.head->data))->number);
+
+    TEST_ASSERT_EQUAL(STRING_TYPE,((JsonString *)(((Json *)(((JsonElement *)(object->list.head->data))->value))->list.head->next->data))->type);
+    TEST_ASSERT_EQUAL_STRING("ali baba",((JsonString *)(((Json *)(((JsonElement *)(object->list.head->data))->value))->list.head->next->data))->string);
+
+    TEST_ASSERT_EQUAL(BOOLEAN_TYPE,((JsonBoolean *)(((Json *)(((JsonElement *)(object->list.head->data))->value))->list.head->next->next->data))->type);
+    TEST_ASSERT_EQUAL(false,((JsonBoolean *)(((Json *)(((JsonElement *)(object->list.head->data))->value))->list.head->next->next->data))->boolean);
+
+  }
+  Catch(e){
+    dumpTokenErrorMessage(e, 1);
+    TEST_FAIL_MESSAGE("System Error: Don't expect any exception to be thrown!");
+  }
+  freeTokenizer(tokenizer);
+}
+
+void test_given_set_of_data_with_1_element_name_missing__expect_fail(void){
+  CEXCEPTION_T e;
+  Token *token;
+  Tokenizer *tokenizer;
+
+  char *jsonText=
+  "{"
+  "  \"age\":23  ,"
+  "  \"boolean\":  \"name\"  "
+  "  :  \"ali baba \"  "
+  "}";
+
+  Try{
+    tokenizer=createTokenizer(jsonText);
+    Json *object=simpleJsonParser(tokenizer);
+
+    TEST_FAIL_MESSAGE("System Error: Expect any exception to be thrown!");
+  }
+  Catch(e){
+    dumpTokenErrorMessage(e, 1);
+  }
+  freeTokenizer(tokenizer);
+}
+
+void test_given_set_of_data_with_1_comma_missing__expect_fail(void){
+  CEXCEPTION_T e;
+  Token *token;
+  Tokenizer *tokenizer;
+
+  char *jsonText=
+  "{"
+  "  \"age\":23  ,"
+  "  \"boolean\":  \"name\"  "
+  "    \"ali baba \"  "
+  "}";
+
+  Try{
+    tokenizer=createTokenizer(jsonText);
+    Json *object=simpleJsonParser(tokenizer);
+
+    TEST_FAIL_MESSAGE("System Error: Expect any exception to be thrown!");
+  }
+  Catch(e){
+    dumpTokenErrorMessage(e, 1);
+  }
+  freeTokenizer(tokenizer);
+}
+
 void test_given___age_23_______name_ali_baba_________expect_error_comma_missing(void){
   CEXCEPTION_T e;
   Token *token;
