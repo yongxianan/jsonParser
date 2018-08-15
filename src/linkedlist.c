@@ -88,6 +88,12 @@ JsonBoolean *createJsonBoolean(BOOLEANS booleanData){
   return tempBoolean;
 }
 
+JsonBoolean *createJsonNull(void){
+  JsonNull *tempNull=(JsonNull *)malloc(sizeof(JsonNull));
+  tempNull->type=NULL_TYPE;
+  return tempNull;
+}
+
 
 /*
     try to make use of function like:
@@ -128,6 +134,12 @@ addNameAndNumberIntoObject(char *name,double numbers,Json *object){
 
 addNameAndBooleanIntoObject(char *name,BOOLEANS booleanData,Json *object){
   JsonBoolean *data=createJsonBoolean(booleanData);
+  JsonElement *element=createJsonElement(name, (void *)data);
+  addElementIntoObject(object,element);
+}
+
+addNameAndNullIntoObject(char *name,Json *object){
+  JsonNull *data=createJsonNull();
   JsonElement *element=createJsonElement(name, (void *)data);
   addElementIntoObject(object,element);
 }

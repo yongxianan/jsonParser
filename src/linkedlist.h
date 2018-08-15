@@ -28,13 +28,15 @@ typedef enum {
   NUMBER_TYPE,
   ARRAY_TYPE,
   STRING_TYPE,
+  NULL_TYPE,
 } JsonType;
 
 typedef enum {
   true,
   false,
+  null,
 }BOOLEANS;
-
+//USED BY ARRAY AND OBJECT
 typedef struct Json Json;
 struct Json{
   JsonType type;
@@ -62,8 +64,11 @@ struct JsonBoolean{
   JsonType type;
   BOOLEANS boolean;
 };
-//3.array
-
+//3.null
+typedef struct JsonNull JsonNull;
+struct JsonNull{
+  JsonType type;
+};
 //4.string
 typedef struct JsonString JsonString;
 struct JsonString{

@@ -12,6 +12,9 @@ BOOLEANS detectBooleanWithDataToken(Token *datatoken){
   else if(strcmp(datatoken->str,"false")==0){
     return false;
   }
+  else if(strcmp(datatoken->str,"null")==0){
+    return null;
+  }
   else{
     throwException(ERR_EXPECTING_COLON, datatoken, "Expect 'string','number','NULL','true','false'.... ");
   }
@@ -19,12 +22,12 @@ BOOLEANS detectBooleanWithDataToken(Token *datatoken){
 
 
 
-/*
+
 /////////////////////experiment to achiece recursive call/////////////////////////////////////////////////////////
 //this function code modify from function:
 //addElementNameAndArrayIntoObject(char *name,Tokenizer *tokenizer,Json *object);
 
-Json *createObjectOrArrayWithinArrayAccordingToTokenizer(Tokenizer *tokenizer){
+Json *createObjectOrArrayOrDataInsideArrayAccordingToTokenizer(Tokenizer *tokenizer){
   Token  *optoken;
   Json *array;
   Json *arrayWithinArray;
@@ -35,25 +38,44 @@ Json *createObjectOrArrayWithinArrayAccordingToTokenizer(Tokenizer *tokenizer){
     array=createJson(ARRAY_TYPE);
     optoken=getToken(tokenizer);  //detect ']' or 'data'
     if(((OperatorToken *)optoken)->str[0]==']'){
+      //do nothing because empty array
     }
     else if(((OperatorToken *)optoken)->str[0]=='['){
       pushBackToken(tokenizer, optoken);    //need to push back 'data' for other function
-      arrayWithinArray=createJsonObjectAndJsonArrayAccordingToTokenizer(tokenizer); //recursive call to create array inside an array
+      arrayWithinArray=createObjectOrArrayOrDataInsideArrayAccordingToTokenizer(tokenizer); //recursive call to create array inside an array
       addJsonEntityToArray(array, (void *)(arrayWithinArray));
+      optoken=getToken(tokenizer);  //detect ']' or ','
     }
     else if(((OperatorToken *)optoken)->str[0]=='{'){
       pushBackToken(tokenizer, optoken);    //need to push back 'data' for other function
       objectWithinArray=simpleJsonParser(tokenizer);       //recursive call to create object inside an array
       addJsonEntityToArray(array, (void *)(objectWithinArray));
+      optoken=getToken(tokenizer);  //detect ']' or ','
     }
     else{
       pushBackToken(tokenizer, optoken);    //need to push back 'data' for other function
       addAnyDataIntoArrayUsingDataToken(tokenizer,array);
-      optoken=getToken(tokenizer);    //detect ','
-      while(((OperatorToken *)optoken)->str[0]==','){
-        freeToken(optoken);
+      optoken=getToken(tokenizer);    //detect ',' or ']'
+    }
+    while(((OperatorToken *)optoken)->str[0]==','){
+      freeToken(optoken);
+      optoken=getToken(tokenizer);    //detect data
+      if(((OperatorToken *)optoken)->str[0]=='['){
+        pushBackToken(tokenizer, optoken);    //need to push back 'data' for other function
+        arrayWithinArray=createObjectOrArrayOrDataInsideArrayAccordingToTokenizer(tokenizer); //recursive call to create array inside an array
+        addJsonEntityToArray(array, (void *)(arrayWithinArray));
+        optoken=getToken(tokenizer);  //detect ']' or 'data'
+      }
+      else if(((OperatorToken *)optoken)->str[0]=='{'){
+        pushBackToken(tokenizer, optoken);    //need to push back 'data' for other function
+        objectWithinArray=simpleJsonParser(tokenizer);       //recursive call to create object inside an array
+        addJsonEntityToArray(array, (void *)(objectWithinArray));
+        optoken=getToken(tokenizer);  //detect ']' or 'data'
+      }
+      else{
+        pushBackToken(tokenizer, optoken);    //need to push back 'data' for other function
         addAnyDataIntoArrayUsingDataToken(tokenizer,array);
-        optoken=getToken(tokenizer);
+        optoken=getToken(tokenizer);    //detect ','
       }
     }
   }
@@ -78,7 +100,7 @@ Json *createObjectOrArrayWithinArrayAccordingToTokenizer(Tokenizer *tokenizer){
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-*/
+
 
 addElementNameAndArrayIntoObject(char *name,Tokenizer *tokenizer,Json *object){
   Token  *optoken;
@@ -127,6 +149,7 @@ addAnyDataIntoArrayUsingDataToken(Tokenizer *tokenizer,Json *array){
   JsonNumber *newJsonNumber;
   JsonString *newJsonString;
   JsonBoolean *newJsonBoolean;
+  JsonNull *newJsonNull;
   BOOLEANS booleanData;
   Token *datatoken=getToken(tokenizer);
   if(datatoken->type==TOKEN_FLOAT_TYPE){
@@ -146,9 +169,16 @@ addAnyDataIntoArrayUsingDataToken(Tokenizer *tokenizer,Json *array){
   }
   else if(datatoken->type == TOKEN_IDENTIFIER_TYPE){
     booleanData=detectBooleanWithDataToken(datatoken);
-    newJsonBoolean=createJsonBoolean(booleanData);
-    addJsonEntityToArray(array, (void *)(newJsonBoolean));
-    freeToken(datatoken);
+    if(booleanData==null){
+      newJsonNull=createJsonNull();
+      addJsonEntityToArray(array, (void *)(newJsonNull));
+      freeToken(datatoken);
+    }
+    else{
+      newJsonBoolean=createJsonBoolean(booleanData);
+      addJsonEntityToArray(array, (void *)(newJsonBoolean));
+      freeToken(datatoken);
+    }
   }
   else{
     throwException(ERR_EXPECTING_COLON, datatoken, "Expect 'string','number','NULL','true','false'.... ");
@@ -163,7 +193,8 @@ addElementAndDataIntoObject(Token *elementtoken,Tokenizer *tokenizer,Json *objec
   Token *datatoken, *token;
   BOOLEANS booleanData;
   JsonElement *element;
-  Json *objectWithinObject;
+  Json *createObjectInsideAnObject;
+  Json *createArrayInsideAnObject;
   //this if else just to detect whether it is a string
   if(elementtoken->type == TOKEN_STRING_TYPE){
   }
@@ -197,23 +228,31 @@ addElementAndDataIntoObject(Token *elementtoken,Tokenizer *tokenizer,Json *objec
   }
   else if(((OperatorToken *)datatoken)->str[0]=='['){
     pushBackToken(tokenizer, datatoken);
-    addElementNameAndArrayIntoObject(elementtoken->str,tokenizer,object);
-    //Json *createJsonObjectAndJsonArrayAccordingToTokenizer(tokenizer);
-    //element=createJsonElement(name, (void *)(array));
-    //addElementIntoObject(object,element);
+    //addElementNameAndArrayIntoObject(elementtoken->str,tokenizer,object);
+    createArrayInsideAnObject=createObjectOrArrayOrDataInsideArrayAccordingToTokenizer(tokenizer);
+    element=createJsonElement(elementtoken->str, (void *)(createArrayInsideAnObject));
+    addElementIntoObject(object,element);
     freeToken(elementtoken);
   }
   else if(((OperatorToken *)datatoken)->str[0]=='{'){
     pushBackToken(tokenizer, datatoken);    //need to push back 'data' for other function
-    objectWithinObject=simpleJsonParser(tokenizer);       //recursive call to create object inside an array
-    element=createJsonElement(elementtoken->str, (void *)(objectWithinObject));
+    createObjectInsideAnObject=simpleJsonParser(tokenizer);       //recursive call to create object inside an array
+    element=createJsonElement(elementtoken->str, (void *)(createObjectInsideAnObject));
     addElementIntoObject(object,element);
+    freeToken(elementtoken);
   }
   else if(datatoken->type == TOKEN_IDENTIFIER_TYPE){
     BOOLEANS booleanData=detectBooleanWithDataToken(datatoken);
-    addNameAndBooleanIntoObject(elementtoken->str,booleanData,object);
-    freeToken(elementtoken);
-    freeToken(datatoken);
+    if(booleanData==null){
+      addNameAndNullIntoObject(elementtoken->str,object);
+      freeToken(elementtoken);
+      freeToken(datatoken);
+    }
+    else{
+      addNameAndBooleanIntoObject(elementtoken->str,booleanData,object);
+      freeToken(elementtoken);
+      freeToken(datatoken);
+    }
   }
   else{
     throwException(ERR_EXPECTING_COLON, datatoken, "Expect 'string','number','NULL','true','false'.... ");
