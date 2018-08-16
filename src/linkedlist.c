@@ -21,7 +21,7 @@ linkedListAddToHead(LinkedList *list, ListItem *itemToAdd){
   if(list->head == NULL && list->tail == NULL){
     (list->head) = tempItem;
     (list->tail) = tempItem;
-    tempItem->next=NULL;
+    (list->tail)->next=NULL;
     (list->count) = (list->count)+1;
   }
   else{
@@ -44,12 +44,13 @@ linkedListAddToTail(LinkedList *list, ListItem *itemToAdd){
   if(list->head == NULL && list->tail == NULL){
     (list->head) = tempItem;
     (list->tail) = tempItem;
-    tempItem->next=NULL;
+    (list->tail)->next=NULL;
     (list->count) = (list->count)+1;
   }
   else{
     list->tail->next=itemToAdd;
     list->tail=tempItem;
+    (list->tail)->next=NULL;
     (list->count) = (list->count)+1;
   }
 }
