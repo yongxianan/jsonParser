@@ -360,7 +360,7 @@ void test_addElementNameAndArrayIntoObject____array_test____random_symbol____exp
   }
   freeTokenizer(tokenizer);
 }
-////////////////////////////////////////
+
 void test_addElementNameAndArrayIntoObject____array_test____random_data_with_square_bracket_missing____expect_fail(void){
   CEXCEPTION_T e;
   Token *elementtoken;
@@ -1143,7 +1143,8 @@ void test_given_an_element_with_multiple_array_data___2_layer_array(void){
   }
   freeTokenizer(tokenizer);
 }
-///////////////////////////////////////////////
+
+
 void test_given_an_element_with_multiple_array_data___2_layer_array____1_data_in_first_layer(void){
   CEXCEPTION_T e;
   Token *token;
@@ -1182,7 +1183,7 @@ void test_given_an_element_with_multiple_array_data___2_layer_array____1_data_in
   }
   freeTokenizer(tokenizer);
 }
-//////////////////////////
+
 
 void test_given_an_element_with_multiple_array_data___2_layer_array____1_data_in_first_layer_array____empty_data_second_layer_array(void){
   CEXCEPTION_T e;
@@ -1261,7 +1262,7 @@ void test_given_an_element_with_multiple_array_data_____1_data_in_first_layer_ar
   }
   freeTokenizer(tokenizer);
 }
-////////////////////////////////////////
+
 
 void test_given_an_element_with_multiple_data____recursive_of_object(void){
   CEXCEPTION_T e;

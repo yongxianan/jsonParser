@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <string.h>
 
+//this file do not use any tokenizer like gettoken function
 
 Json *createJson(JsonType whatJsonType){
   Json *newJson=(Json *)malloc(sizeof(Json));

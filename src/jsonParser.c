@@ -228,6 +228,9 @@ addElementAndDataIntoObject(Token *elementtoken,Tokenizer *tokenizer,Json *objec
   }
   else if(((OperatorToken *)datatoken)->str[0]=='['){
     pushBackToken(tokenizer, datatoken);
+    //this commented function replace by 3 function below to simplify the logic
+    //also enable recursive function to work
+    //because this commented function is created without recursive call in mind
     //addElementNameAndArrayIntoObject(elementtoken->str,tokenizer,object);
     createArrayInsideAnObject=createObjectOrArrayOrDataInsideArrayAccordingToTokenizer(tokenizer);
     element=createJsonElement(elementtoken->str, (void *)(createArrayInsideAnObject));
