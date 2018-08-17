@@ -18,6 +18,14 @@ void tearDown(void)
 {
 }
 
+
+/*
+  lot of function found in this test code already tested in
+  another test file (test_linkedlist.c).
+  Note: function being tested in here like [BOOLEANS detectBooleanWithDataToken(Token *datatoken);]
+        never use on test file (test_linkedlist.c) during testing. Because all the function code in
+        (linkedlist.c) didn't use tokenizer function like gettoken, pushBackToken and freeToken.
+*/ 
 void test_detectBooleanWithDataToken______false_____(void){
   CEXCEPTION_T e;
   Token *datatoken;
