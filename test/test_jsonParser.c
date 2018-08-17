@@ -72,8 +72,10 @@ void test_addAnyDataIntoArrayUsingDataToken______string_again____(void){
     tokenizer=createTokenizer(jsonText);
     addAnyDataIntoArrayUsingDataToken(tokenizer,array);
     TEST_ASSERT_EQUAL(ARRAY_TYPE,array->type);
-    TEST_ASSERT_EQUAL(STRING_TYPE,((JsonString *)((array->list.head)->data))->type);
-    TEST_ASSERT_EQUAL_STRING("string again",((JsonString *)((array->list.head)->data))->string);
+    ListItem *li;
+    li=array->list.head;
+    TEST_ASSERT_EQUAL(STRING_TYPE,((JsonString *)(li->data))->type);
+    TEST_ASSERT_EQUAL_STRING("string again",((JsonString *)(li->data))->string);
   }
   Catch(e){
     dumpTokenErrorMessage(e, 1);
@@ -94,8 +96,10 @@ void test_addAnyDataIntoArrayUsingDataToken______345point4744____(void){
     tokenizer=createTokenizer(jsonText);
     addAnyDataIntoArrayUsingDataToken(tokenizer,array);
     TEST_ASSERT_EQUAL(ARRAY_TYPE,array->type);
-    TEST_ASSERT_EQUAL(NUMBER_TYPE,((JsonNumber *)((array->list.head)->data))->type);
-    TEST_ASSERT_EQUAL(345.4744,((JsonNumber *)((array->list.head)->data))->number);
+    ListItem *li;
+    li=array->list.head;
+    TEST_ASSERT_EQUAL(NUMBER_TYPE,((JsonNumber *)(li->data))->type);
+    TEST_ASSERT_EQUAL(345.4744,((JsonNumber *)(li->data))->number);
   }
   Catch(e){
     dumpTokenErrorMessage(e, 1);
@@ -116,8 +120,10 @@ void test_addAnyDataIntoArrayUsingDataToken______integer_number____(void){
     tokenizer=createTokenizer(jsonText);
     addAnyDataIntoArrayUsingDataToken(tokenizer,array);
     TEST_ASSERT_EQUAL(ARRAY_TYPE,array->type);
-    TEST_ASSERT_EQUAL(NUMBER_TYPE,((JsonNumber *)((array->list.head)->data))->type);
-    TEST_ASSERT_EQUAL(3458586,((JsonNumber *)((array->list.head)->data))->number);
+    ListItem *li;
+    li=array->list.head;
+    TEST_ASSERT_EQUAL(NUMBER_TYPE,((JsonNumber *)(li->data))->type);
+    TEST_ASSERT_EQUAL(3458586,((JsonNumber *)(li->data))->number);
   }
   Catch(e){
     dumpTokenErrorMessage(e, 1);
@@ -138,8 +144,10 @@ void test_addAnyDataIntoArrayUsingDataToken______false____(void){
     tokenizer=createTokenizer(jsonText);
     addAnyDataIntoArrayUsingDataToken(tokenizer,array);
     TEST_ASSERT_EQUAL(ARRAY_TYPE,array->type);
-    TEST_ASSERT_EQUAL(BOOLEAN_TYPE,((JsonBoolean *)((array->list.head)->data))->type);
-    TEST_ASSERT_EQUAL(false,((JsonBoolean *)((array->list.head)->data))->boolean);
+    ListItem *li;
+    li=array->list.head;
+    TEST_ASSERT_EQUAL(BOOLEAN_TYPE,((JsonBoolean *)(li->data))->type);
+    TEST_ASSERT_EQUAL(false,((JsonBoolean *)(li->data))->boolean);
   }
   Catch(e){
     dumpTokenErrorMessage(e, 1);
@@ -190,19 +198,24 @@ void test_addElementNameAndArrayIntoObject_____array_test____number___string____
     elementtoken=getToken(tokenizer);   //just to get element name which is "array test"
     addElementNameAndArrayIntoObject(elementtoken->str,tokenizer,&object);
 
-    TEST_ASSERT_EQUAL(ELEMENT_TYPE,((JsonElement *)(object.list.head->data))->type);
+    ListItem *li;
+    li=object.list.head;
+    TEST_ASSERT_EQUAL(ELEMENT_TYPE,((JsonElement *)(li->data))->type);
 
-    TEST_ASSERT_EQUAL(ARRAY_TYPE,((Json *)(((JsonElement *)(object.list.head->data))->value))->type);
-    TEST_ASSERT_EQUAL(3,((Json *)(((JsonElement *)(object.list.head->data))->value))->list.count);
+    TEST_ASSERT_EQUAL(ARRAY_TYPE,((Json *)(((JsonElement *)(li->data))->value))->type);
+    TEST_ASSERT_EQUAL(3,((Json *)(((JsonElement *)(li->data))->value))->list.count);
 
-    TEST_ASSERT_EQUAL(NUMBER_TYPE,((JsonNumber *)(((Json *)(((JsonElement *)(object.list.head->data))->value))->list.head->data))->type);
-    TEST_ASSERT_EQUAL(22.55,((JsonNumber *)(((Json *)(((JsonElement *)(object.list.head->data))->value))->list.head->data))->number);
+    li=((Json *)(((JsonElement *)(li->data))->value))->list.head;
+    TEST_ASSERT_EQUAL(NUMBER_TYPE,((JsonNumber *)(li->data))->type);
+    TEST_ASSERT_EQUAL(22.55,((JsonNumber *)(li->data))->number);
 
-    TEST_ASSERT_EQUAL(STRING_TYPE,((JsonString *)(((Json *)(((JsonElement *)(object.list.head->data))->value))->list.head->next->data))->type);
-    TEST_ASSERT_EQUAL_STRING("epic array test",((JsonString *)(((Json *)(((JsonElement *)(object.list.head->data))->value))->list.head->next->data))->string);
+    li=li->next;
+    TEST_ASSERT_EQUAL(STRING_TYPE,((JsonString *)(li->data))->type);
+    TEST_ASSERT_EQUAL_STRING("epic array test",((JsonString *)(li->data))->string);
 
-    TEST_ASSERT_EQUAL(BOOLEAN_TYPE,((JsonBoolean *)(((Json *)(((JsonElement *)(object.list.head->data))->value))->list.head->next->next->data))->type);
-    TEST_ASSERT_EQUAL(false,((JsonBoolean *)(((Json *)(((JsonElement *)(object.list.head->data))->value))->list.head->next->next->data))->boolean);
+    li=li->next;
+    TEST_ASSERT_EQUAL(BOOLEAN_TYPE,((JsonBoolean *)(li->data))->type);
+    TEST_ASSERT_EQUAL(false,((JsonBoolean *)(li->data))->boolean);
 
   }
   Catch(e){
@@ -226,19 +239,24 @@ void test_addElementNameAndArrayIntoObject_____array_test____integer_number___st
     elementtoken=getToken(tokenizer);   //just to get element name which is "array test"
     addElementNameAndArrayIntoObject(elementtoken->str,tokenizer,&object);
 
-    TEST_ASSERT_EQUAL(ELEMENT_TYPE,((JsonElement *)(object.list.head->data))->type);
+    ListItem *li;
+    li=object.list.head;
+    TEST_ASSERT_EQUAL(ELEMENT_TYPE,((JsonElement *)(li->data))->type);
 
-    TEST_ASSERT_EQUAL(ARRAY_TYPE,((Json *)(((JsonElement *)(object.list.head->data))->value))->type);
-    TEST_ASSERT_EQUAL(3,((Json *)(((JsonElement *)(object.list.head->data))->value))->list.count);
+    TEST_ASSERT_EQUAL(ARRAY_TYPE,((Json *)(((JsonElement *)(li->data))->value))->type);
+    TEST_ASSERT_EQUAL(3,((Json *)(((JsonElement *)(li->data))->value))->list.count);
 
-    TEST_ASSERT_EQUAL(NUMBER_TYPE,((JsonNumber *)(((Json *)(((JsonElement *)(object.list.head->data))->value))->list.head->data))->type);
-    TEST_ASSERT_EQUAL(5866,((JsonNumber *)(((Json *)(((JsonElement *)(object.list.head->data))->value))->list.head->data))->number);
+    li=((Json *)(((JsonElement *)(li->data))->value))->list.head;
+    TEST_ASSERT_EQUAL(NUMBER_TYPE,((JsonNumber *)(li->data))->type);
+    TEST_ASSERT_EQUAL(5866,((JsonNumber *)(li->data))->number);
 
-    TEST_ASSERT_EQUAL(STRING_TYPE,((JsonString *)(((Json *)(((JsonElement *)(object.list.head->data))->value))->list.head->next->data))->type);
-    TEST_ASSERT_EQUAL_STRING("epic array test",((JsonString *)(((Json *)(((JsonElement *)(object.list.head->data))->value))->list.head->next->data))->string);
+    li=li->next;
+    TEST_ASSERT_EQUAL(STRING_TYPE,((JsonString *)(li->data))->type);
+    TEST_ASSERT_EQUAL_STRING("epic array test",((JsonString *)(li->data))->string);
 
-    TEST_ASSERT_EQUAL(BOOLEAN_TYPE,((JsonBoolean *)(((Json *)(((JsonElement *)(object.list.head->data))->value))->list.head->next->next->data))->type);
-    TEST_ASSERT_EQUAL(false,((JsonBoolean *)(((Json *)(((JsonElement *)(object.list.head->data))->value))->list.head->next->next->data))->boolean);
+    li=li->next;
+    TEST_ASSERT_EQUAL(BOOLEAN_TYPE,((JsonBoolean *)(li->data))->type);
+    TEST_ASSERT_EQUAL(false,((JsonBoolean *)(li->data))->boolean);
 
   }
   Catch(e){
@@ -262,12 +280,14 @@ void test_addElementNameAndArrayIntoObject_____array_test____square_bracket__exp
     elementtoken=getToken(tokenizer);   //just to get element name which is "array test"
     addElementNameAndArrayIntoObject(elementtoken->str,tokenizer,&object);
 
-    TEST_ASSERT_EQUAL(ELEMENT_TYPE,((JsonElement *)(object.list.head->data))->type);
+    ListItem *li;
+    li=object.list.head;
+    TEST_ASSERT_EQUAL(ELEMENT_TYPE,((JsonElement *)(li->data))->type);
 
-    TEST_ASSERT_EQUAL(ARRAY_TYPE,((Json *)(((JsonElement *)(object.list.head->data))->value))->type);
-    TEST_ASSERT_EQUAL(0,((Json *)(((JsonElement *)(object.list.head->data))->value))->list.count);
-    TEST_ASSERT_EQUAL(NULL,((Json *)(((JsonElement *)(object.list.head->data))->value))->list.head);
-    TEST_ASSERT_EQUAL(NULL,((Json *)(((JsonElement *)(object.list.head->data))->value))->list.tail);
+    TEST_ASSERT_EQUAL(ARRAY_TYPE,((Json *)(((JsonElement *)(li->data))->value))->type);
+    TEST_ASSERT_EQUAL(0,((Json *)(((JsonElement *)(li->data))->value))->list.count);
+    TEST_ASSERT_EQUAL(NULL,((Json *)(((JsonElement *)(li->data))->value))->list.head);
+    TEST_ASSERT_EQUAL(NULL,((Json *)(((JsonElement *)(li->data))->value))->list.tail);
   }
   Catch(e){
     dumpTokenErrorMessage(e, 1);
@@ -417,22 +437,28 @@ void test_addElementAndDataIntoObject_______random_data_array(void){
     elementtoken=getToken(tokenizer);
     addElementAndDataIntoObject(elementtoken,tokenizer,object);
 
-    TEST_ASSERT_EQUAL(ELEMENT_TYPE,((JsonElement *)(object->list.head->data))->type);
+    ListItem *li;
+    li=object->list.head;
+    TEST_ASSERT_EQUAL(ELEMENT_TYPE,((JsonElement *)(li->data))->type);
 
-    TEST_ASSERT_EQUAL(ARRAY_TYPE,((Json *)(((JsonElement *)(object->list.head->data))->value))->type);
-    TEST_ASSERT_EQUAL(4,((Json *)(((JsonElement *)(object->list.head->data))->value))->list.count);
+    TEST_ASSERT_EQUAL(ARRAY_TYPE,((Json *)(((JsonElement *)(li->data))->value))->type);
+    TEST_ASSERT_EQUAL(4,((Json *)(((JsonElement *)(li->data))->value))->list.count);
 
-    TEST_ASSERT_EQUAL(NUMBER_TYPE,((JsonNumber *)(((Json *)(((JsonElement *)(object->list.head->data))->value))->list.head->data))->type);
-    TEST_ASSERT_EQUAL(5866,((JsonNumber *)(((Json *)(((JsonElement *)(object->list.head->data))->value))->list.head->data))->number);
+    li=((Json *)(((JsonElement *)(li->data))->value))->list.head;
+    TEST_ASSERT_EQUAL(NUMBER_TYPE,((JsonNumber *)(li->data))->type);
+    TEST_ASSERT_EQUAL(5866,((JsonNumber *)(li->data))->number);
 
-    TEST_ASSERT_EQUAL(STRING_TYPE,((JsonString *)(((Json *)(((JsonElement *)(object->list.head->data))->value))->list.head->next->data))->type);
-    TEST_ASSERT_EQUAL_STRING("epic array test",((JsonString *)(((Json *)(((JsonElement *)(object->list.head->data))->value))->list.head->next->data))->string);
+    li=li->next;
+    TEST_ASSERT_EQUAL(STRING_TYPE,((JsonString *)(li->data))->type);
+    TEST_ASSERT_EQUAL_STRING("epic array test",((JsonString *)(li->data))->string);
 
-    TEST_ASSERT_EQUAL(BOOLEAN_TYPE,((JsonBoolean *)(((Json *)(((JsonElement *)(object->list.head->data))->value))->list.head->next->next->data))->type);
-    TEST_ASSERT_EQUAL(false,((JsonBoolean *)(((Json *)(((JsonElement *)(object->list.head->data))->value))->list.head->next->next->data))->boolean);
+    li=li->next;
+    TEST_ASSERT_EQUAL(BOOLEAN_TYPE,((JsonBoolean *)(li->data))->type);
+    TEST_ASSERT_EQUAL(false,((JsonBoolean *)(li->data))->boolean);
 
-    TEST_ASSERT_EQUAL(NUMBER_TYPE,((JsonNumber *)(((Json *)(((JsonElement *)(object->list.head->data))->value))->list.tail->data))->type);
-    TEST_ASSERT_EQUAL(23.655,((JsonNumber *)(((Json *)(((JsonElement *)(object->list.head->data))->value))->list.tail->data))->number);
+    li=li->next;
+    TEST_ASSERT_EQUAL(NUMBER_TYPE,((JsonNumber *)(li->data))->type);
+    TEST_ASSERT_EQUAL(23.655,((JsonNumber *)(li->data))->number);
 
   }
   Catch(e){
@@ -503,10 +529,12 @@ void test_addElementAndDataIntoObject_______number_22point55(void){
     TEST_ASSERT_EQUAL(1,object->list.count);
     TEST_ASSERT_EQUAL(OBJECT_TYPE,object->type);
 
-    TEST_ASSERT_EQUAL(ELEMENT_TYPE,((JsonElement *)(object->list.head->data))->type);
-    TEST_ASSERT_EQUAL_STRING("number",((JsonElement *)(object->list.head->data))->name);
-    TEST_ASSERT_EQUAL(NUMBER_TYPE,((JsonNumber *)((JsonElement *)(object->list.head->data))->value)->type);
-    TEST_ASSERT_EQUAL(22.55,((JsonNumber *)(((JsonElement *)(object->list.head->data))->value))->number);
+    ListItem *li;
+    li=object->list.head;
+    TEST_ASSERT_EQUAL(ELEMENT_TYPE,((JsonElement *)(li->data))->type);
+    TEST_ASSERT_EQUAL_STRING("number",((JsonElement *)(li->data))->name);
+    TEST_ASSERT_EQUAL(NUMBER_TYPE,((JsonNumber *)((JsonElement *)(li->data))->value)->type);
+    TEST_ASSERT_EQUAL(22.55,((JsonNumber *)(((JsonElement *)(li->data))->value))->number);
   }
   Catch(e){
     dumpTokenErrorMessage(e, 1);
@@ -533,10 +561,12 @@ void test_addElementAndDataIntoObject_______string_my_name(void){
     TEST_ASSERT_EQUAL(1,object->list.count);
     TEST_ASSERT_EQUAL(OBJECT_TYPE,object->type);
 
-    TEST_ASSERT_EQUAL(ELEMENT_TYPE,((JsonElement *)(object->list.head->data))->type);
-    TEST_ASSERT_EQUAL_STRING("string",((JsonElement *)(object->list.head->data))->name);
-    TEST_ASSERT_EQUAL(STRING_TYPE,((JsonString *)((JsonElement *)(object->list.head->data))->value)->type);
-    TEST_ASSERT_EQUAL_STRING("my name",((JsonString *)(((JsonElement *)(object->list.head->data))->value))->string);
+    ListItem *li;
+    li=object->list.head;
+    TEST_ASSERT_EQUAL(ELEMENT_TYPE,((JsonElement *)(li->data))->type);
+    TEST_ASSERT_EQUAL_STRING("string",((JsonElement *)(li->data))->name);
+    TEST_ASSERT_EQUAL(STRING_TYPE,((JsonString *)((JsonElement *)(li->data))->value)->type);
+    TEST_ASSERT_EQUAL_STRING("my name",((JsonString *)(((JsonElement *)(li->data))->value))->string);
   }
   Catch(e){
     dumpTokenErrorMessage(e, 1);
@@ -562,10 +592,12 @@ void test_addElementAndDataIntoObject_______boOlEaN_false(void){
     TEST_ASSERT_EQUAL(1,object->list.count);
     TEST_ASSERT_EQUAL(OBJECT_TYPE,object->type);
 
-    TEST_ASSERT_EQUAL(ELEMENT_TYPE,((JsonElement *)(object->list.head->data))->type);
-    TEST_ASSERT_EQUAL_STRING("boOlEaN",((JsonElement *)(object->list.head->data))->name);
-    TEST_ASSERT_EQUAL(BOOLEAN_TYPE,((JsonBoolean *)((JsonElement *)(object->list.head->data))->value)->type);
-    TEST_ASSERT_EQUAL(false,((JsonBoolean *)(((JsonElement *)(object->list.head->data))->value))->boolean);
+    ListItem *li;
+    li=object->list.head;
+    TEST_ASSERT_EQUAL(ELEMENT_TYPE,((JsonElement *)(li->data))->type);
+    TEST_ASSERT_EQUAL_STRING("boOlEaN",((JsonElement *)(li->data))->name);
+    TEST_ASSERT_EQUAL(BOOLEAN_TYPE,((JsonBoolean *)((JsonElement *)(li->data))->value)->type);
+    TEST_ASSERT_EQUAL(false,((JsonBoolean *)(((JsonElement *)(li->data))->value))->boolean);
   }
   Catch(e){
     dumpTokenErrorMessage(e, 1);
@@ -792,12 +824,14 @@ void test_element_name_and_integer_number(void){
     TEST_ASSERT_EQUAL(1,object->list.count);
     TEST_ASSERT_EQUAL(OBJECT_TYPE,object->type);
 
-    TEST_ASSERT_EQUAL(ELEMENT_TYPE,((JsonElement *)(object->list.head->data))->type);
-    TEST_ASSERT_EQUAL_STRING("age",((JsonElement *)(object->list.head->data))->name);
-    TEST_ASSERT_EQUAL(NUMBER_TYPE,((JsonNumber *)((JsonElement *)(object->list.head->data))->value)->type);
-    TEST_ASSERT_EQUAL(23,((JsonNumber *)(((JsonElement *)(object->list.head->data))->value))->number);
+    ListItem *li;
+    li=object->list.head;
+    TEST_ASSERT_EQUAL(ELEMENT_TYPE,((JsonElement *)(li->data))->type);
+    TEST_ASSERT_EQUAL_STRING("age",((JsonElement *)(li->data))->name);
+    TEST_ASSERT_EQUAL(NUMBER_TYPE,((JsonNumber *)((JsonElement *)(li->data))->value)->type);
+    TEST_ASSERT_EQUAL(23,((JsonNumber *)(((JsonElement *)(li->data))->value))->number);
 
-    TEST_ASSERT_EQUAL(NULL,object->list.head->next);
+    TEST_ASSERT_EQUAL(NULL,li->next);
   }
   Catch(e){
     dumpTokenErrorMessage(e, 1);
@@ -915,17 +949,21 @@ void test_given_2_set_of_data_with_data_type_number_and_string(void){
     TEST_ASSERT_EQUAL(2,object->list.count);
     TEST_ASSERT_EQUAL(OBJECT_TYPE,object->type);
 
-    TEST_ASSERT_EQUAL(ELEMENT_TYPE,((JsonElement *)(object->list.head->data))->type);
-    TEST_ASSERT_EQUAL_STRING("age",((JsonElement *)(object->list.head->data))->name);
-    TEST_ASSERT_EQUAL(NUMBER_TYPE,((JsonNumber *)(((JsonElement *)(object->list.head->data))->value))->type);
-    TEST_ASSERT_EQUAL(23,((JsonNumber *)(((JsonElement *)(object->list.head->data))->value))->number);
+    ListItem *li;
+    li=object->list.head;
+    TEST_ASSERT_EQUAL(ELEMENT_TYPE,((JsonElement *)(li->data))->type);
+    TEST_ASSERT_EQUAL_STRING("age",((JsonElement *)(li->data))->name);
+    TEST_ASSERT_EQUAL(NUMBER_TYPE,((JsonNumber *)(((JsonElement *)(li->data))->value))->type);
+    TEST_ASSERT_EQUAL(23,((JsonNumber *)(((JsonElement *)(li->data))->value))->number);
 
-    TEST_ASSERT_EQUAL(ELEMENT_TYPE,((JsonElement *)(object->list.tail->data))->type);
-    TEST_ASSERT_EQUAL_STRING("name",((JsonElement *)(object->list.tail->data))->name);
-    TEST_ASSERT_EQUAL(STRING_TYPE,((JsonString *)(((JsonElement *)(object->list.tail->data))->value))->type);
-    TEST_ASSERT_EQUAL_STRING("ali baba ",((JsonString *)(((JsonElement *)(object->list.tail->data))->value))->string);
+    li=li->next;
+    TEST_ASSERT_EQUAL(ELEMENT_TYPE,((JsonElement *)(li->data))->type);
+    TEST_ASSERT_EQUAL_STRING("name",((JsonElement *)(li->data))->name);
+    TEST_ASSERT_EQUAL(STRING_TYPE,((JsonString *)(((JsonElement *)(li->data))->value))->type);
+    TEST_ASSERT_EQUAL_STRING("ali baba ",((JsonString *)(((JsonElement *)(li->data))->value))->string);
 
-    TEST_ASSERT_EQUAL(NULL,object->list.head->next->next);
+    li=li->next;
+    TEST_ASSERT_EQUAL(NULL,li);
   }
   Catch(e){
     dumpTokenErrorMessage(e, 1);
@@ -953,20 +991,24 @@ void test_given_3_set_of_data_with_data_type___number___boolean___string(void){
     TEST_ASSERT_EQUAL(3,object->list.count);
     TEST_ASSERT_EQUAL(OBJECT_TYPE,object->type);
 
-    TEST_ASSERT_EQUAL(ELEMENT_TYPE,((JsonElement *)(object->list.head->data))->type);
-    TEST_ASSERT_EQUAL_STRING("age",((JsonElement *)(object->list.head->data))->name);
-    TEST_ASSERT_EQUAL(NUMBER_TYPE,((JsonNumber *)(((JsonElement *)(object->list.head->data))->value))->type);
-    TEST_ASSERT_EQUAL(23,((JsonNumber *)(((JsonElement *)(object->list.head->data))->value))->number);
+    ListItem *li;
+    li=object->list.head;
+    TEST_ASSERT_EQUAL(ELEMENT_TYPE,((JsonElement *)(li->data))->type);
+    TEST_ASSERT_EQUAL_STRING("age",((JsonElement *)(li->data))->name);
+    TEST_ASSERT_EQUAL(NUMBER_TYPE,((JsonNumber *)(((JsonElement *)(li->data))->value))->type);
+    TEST_ASSERT_EQUAL(23,((JsonNumber *)(((JsonElement *)(li->data))->value))->number);
 
-    TEST_ASSERT_EQUAL(ELEMENT_TYPE,((JsonElement *)(object->list.head->next->data))->type);
-    TEST_ASSERT_EQUAL_STRING("boolean",((JsonElement *)(object->list.head->next->data))->name);
-    TEST_ASSERT_EQUAL(BOOLEAN_TYPE,((JsonBoolean *)(((JsonElement *)(object->list.head->next->data))->value))->type);
-    TEST_ASSERT_EQUAL(true,((JsonBoolean *)(((JsonElement *)(object->list.head->next->data))->value))->boolean);
+    li=li->next;
+    TEST_ASSERT_EQUAL(ELEMENT_TYPE,((JsonElement *)(li->data))->type);
+    TEST_ASSERT_EQUAL_STRING("boolean",((JsonElement *)(li->data))->name);
+    TEST_ASSERT_EQUAL(BOOLEAN_TYPE,((JsonBoolean *)(((JsonElement *)(li->data))->value))->type);
+    TEST_ASSERT_EQUAL(true,((JsonBoolean *)(((JsonElement *)(li->data))->value))->boolean);
 
-    TEST_ASSERT_EQUAL(ELEMENT_TYPE,((JsonElement *)(object->list.tail->data))->type);
-    TEST_ASSERT_EQUAL_STRING("name",((JsonElement *)(object->list.tail->data))->name);
-    TEST_ASSERT_EQUAL(STRING_TYPE,((JsonString *)(((JsonElement *)(object->list.tail->data))->value))->type);
-    TEST_ASSERT_EQUAL_STRING("ali baba ",((JsonString *)(((JsonElement *)(object->list.tail->data))->value))->string);
+    li=li->next;
+    TEST_ASSERT_EQUAL(ELEMENT_TYPE,((JsonElement *)(li->data))->type);
+    TEST_ASSERT_EQUAL_STRING("name",((JsonElement *)(li->data))->name);
+    TEST_ASSERT_EQUAL(STRING_TYPE,((JsonString *)(((JsonElement *)(li->data))->value))->type);
+    TEST_ASSERT_EQUAL_STRING("ali baba ",((JsonString *)(((JsonElement *)(li->data))->value))->string);
 
     TEST_ASSERT_EQUAL(NULL,object->list.head->next->next->next);
   }
@@ -997,39 +1039,47 @@ void test_given_an_element_with_array___number___boolean___string(void){
     TEST_ASSERT_EQUAL(4,object->list.count);
     TEST_ASSERT_EQUAL(OBJECT_TYPE,object->type);
 
-    TEST_ASSERT_EQUAL(ELEMENT_TYPE,((JsonElement *)(object->list.head->data))->type);
-    TEST_ASSERT_EQUAL_STRING("age",((JsonElement *)(object->list.head->data))->name);
-    TEST_ASSERT_EQUAL(NUMBER_TYPE,((JsonNumber *)(((JsonElement *)(object->list.head->data))->value))->type);
-    TEST_ASSERT_EQUAL(23,((JsonNumber *)(((JsonElement *)(object->list.head->data))->value))->number);
+    ListItem *li;
+    li=object->list.head;
+    TEST_ASSERT_EQUAL(ELEMENT_TYPE,((JsonElement *)(li->data))->type);
+    TEST_ASSERT_EQUAL_STRING("age",((JsonElement *)(li->data))->name);
+    TEST_ASSERT_EQUAL(NUMBER_TYPE,((JsonNumber *)(((JsonElement *)(li->data))->value))->type);
+    TEST_ASSERT_EQUAL(23,((JsonNumber *)(((JsonElement *)(li->data))->value))->number);
 
-    TEST_ASSERT_EQUAL(ELEMENT_TYPE,((JsonElement *)(object->list.head->next->data))->type);
-    TEST_ASSERT_EQUAL_STRING("boolean",((JsonElement *)(object->list.head->next->data))->name);
-    TEST_ASSERT_EQUAL(BOOLEAN_TYPE,((JsonBoolean *)(((JsonElement *)(object->list.head->next->data))->value))->type);
-    TEST_ASSERT_EQUAL(true,((JsonBoolean *)(((JsonElement *)(object->list.head->next->data))->value))->boolean);
+    li=li->next;
+    TEST_ASSERT_EQUAL(ELEMENT_TYPE,((JsonElement *)(li->data))->type);
+    TEST_ASSERT_EQUAL_STRING("boolean",((JsonElement *)(li->data))->name);
+    TEST_ASSERT_EQUAL(BOOLEAN_TYPE,((JsonBoolean *)(((JsonElement *)(li->data))->value))->type);
+    TEST_ASSERT_EQUAL(true,((JsonBoolean *)(((JsonElement *)(li->data))->value))->boolean);
 
-    TEST_ASSERT_EQUAL(ELEMENT_TYPE,((JsonElement *)(object->list.head->next->next->data))->type);
-    TEST_ASSERT_EQUAL_STRING("name",((JsonElement *)(object->list.head->next->next->data))->name);
-    TEST_ASSERT_EQUAL(STRING_TYPE,((JsonString *)(((JsonElement *)(object->list.head->next->next->data))->value))->type);
-    TEST_ASSERT_EQUAL_STRING("ali baba ",((JsonString *)(((JsonElement *)(object->list.head->next->next->data))->value))->string);
+    li=li->next;
+    TEST_ASSERT_EQUAL(ELEMENT_TYPE,((JsonElement *)(li->data))->type);
+    TEST_ASSERT_EQUAL_STRING("name",((JsonElement *)(li->data))->name);
+    TEST_ASSERT_EQUAL(STRING_TYPE,((JsonString *)(((JsonElement *)(li->data))->value))->type);
+    TEST_ASSERT_EQUAL_STRING("ali baba ",((JsonString *)(((JsonElement *)(li->data))->value))->string);
+
     //array test
-    TEST_ASSERT_EQUAL(ELEMENT_TYPE,((JsonElement *)(object->list.tail->data))->type);
-    TEST_ASSERT_EQUAL_STRING("array data test",((JsonElement *)(object->list.tail->data))->name);
+    li=li->next;
+    TEST_ASSERT_EQUAL(ELEMENT_TYPE,((JsonElement *)(li->data))->type);
+    TEST_ASSERT_EQUAL_STRING("array data test",((JsonElement *)(li->data))->name);
+    TEST_ASSERT_EQUAL(ARRAY_TYPE,((Json *)(((JsonElement *)(li->data))->value))->type);
+    TEST_ASSERT_EQUAL(3,((Json *)(((JsonElement *)(li->data))->value))->list.count);
 
-    TEST_ASSERT_EQUAL(NULL,object->list.head->next->next->next->next);
+    TEST_ASSERT_EQUAL(NULL,li->next);
 
-    TEST_ASSERT_EQUAL(ARRAY_TYPE,((Json *)(((JsonElement *)(object->list.tail->data))->value))->type);
-    TEST_ASSERT_EQUAL(3,((Json *)(((JsonElement *)(object->list.tail->data))->value))->list.count);
+    li=((Json *)(((JsonElement *)(li->data))->value))->list.head;
+    TEST_ASSERT_EQUAL(NUMBER_TYPE,((JsonNumber *)(li->data))->type);
+    TEST_ASSERT_EQUAL(34.90,((JsonNumber *)(li->data))->number);
 
-    TEST_ASSERT_EQUAL(NUMBER_TYPE,((JsonNumber *)(((Json *)(((JsonElement *)(object->list.tail->data))->value))->list.head->data))->type);
-    TEST_ASSERT_EQUAL(34.90,((JsonNumber *)(((Json *)(((JsonElement *)(object->list.tail->data))->value))->list.head->data))->number);
+    li=li->next;
+    TEST_ASSERT_EQUAL(STRING_TYPE,((JsonString *)(li->data))->type);
+    TEST_ASSERT_EQUAL_STRING("ali baba",((JsonString *)(li->data))->string);
 
-    TEST_ASSERT_EQUAL(STRING_TYPE,((JsonString *)(((Json *)(((JsonElement *)(object->list.tail->data))->value))->list.head->next->data))->type);
-    TEST_ASSERT_EQUAL_STRING("ali baba",((JsonString *)(((Json *)(((JsonElement *)(object->list.tail->data))->value))->list.head->next->data))->string);
+    li=li->next;
+    TEST_ASSERT_EQUAL(BOOLEAN_TYPE,((JsonBoolean *)(li->data))->type);
+    TEST_ASSERT_EQUAL(false,((JsonBoolean *)(li->data))->boolean);
 
-    TEST_ASSERT_EQUAL(BOOLEAN_TYPE,((JsonBoolean *)(((Json *)(((JsonElement *)(object->list.tail->data))->value))->list.head->next->next->data))->type);
-    TEST_ASSERT_EQUAL(false,((JsonBoolean *)(((Json *)(((JsonElement *)(object->list.tail->data))->value))->list.head->next->next->data))->boolean);
-
-    TEST_ASSERT_EQUAL(NULL,((Json *)(((JsonElement *)(object->list.tail->data))->value))->list.head->next->next->next);
+    TEST_ASSERT_EQUAL(NULL,li->next);
 
   }
   Catch(e){
@@ -1056,24 +1106,29 @@ void test_given_an_element_with_array_data___number___boolean___string(void){
     TEST_ASSERT_EQUAL(1,object->list.count);
     TEST_ASSERT_EQUAL(OBJECT_TYPE,object->type);
 
-    TEST_ASSERT_EQUAL(ELEMENT_TYPE,((JsonElement *)(object->list.head->data))->type);
-    TEST_ASSERT_EQUAL_STRING("array data test",((JsonElement *)(object->list.head->data))->name);
+    ListItem *li;
+    li=object->list.head;
+    TEST_ASSERT_EQUAL(ELEMENT_TYPE,((JsonElement *)(li->data))->type);
+    TEST_ASSERT_EQUAL_STRING("array data test",((JsonElement *)(li->data))->name);
 
-    TEST_ASSERT_EQUAL(NULL,object->list.head->next);
+    TEST_ASSERT_EQUAL(NULL,li->next);
 
-    TEST_ASSERT_EQUAL(ARRAY_TYPE,((Json *)(((JsonElement *)(object->list.head->data))->value))->type);
-    TEST_ASSERT_EQUAL(3,((Json *)(((JsonElement *)(object->list.head->data))->value))->list.count);
+    TEST_ASSERT_EQUAL(ARRAY_TYPE,((Json *)(((JsonElement *)(li->data))->value))->type);
+    TEST_ASSERT_EQUAL(3,((Json *)(((JsonElement *)(li->data))->value))->list.count);
 
-    TEST_ASSERT_EQUAL(NUMBER_TYPE,((JsonNumber *)(((Json *)(((JsonElement *)(object->list.head->data))->value))->list.head->data))->type);
-    TEST_ASSERT_EQUAL(34.90,((JsonNumber *)(((Json *)(((JsonElement *)(object->list.head->data))->value))->list.head->data))->number);
+    li=((Json *)(((JsonElement *)(li->data))->value))->list.head;
+    TEST_ASSERT_EQUAL(NUMBER_TYPE,((JsonNumber *)(li->data))->type);
+    TEST_ASSERT_EQUAL(34.90,((JsonNumber *)(li->data))->number);
 
-    TEST_ASSERT_EQUAL(STRING_TYPE,((JsonString *)(((Json *)(((JsonElement *)(object->list.head->data))->value))->list.head->next->data))->type);
-    TEST_ASSERT_EQUAL_STRING("ali baba",((JsonString *)(((Json *)(((JsonElement *)(object->list.head->data))->value))->list.head->next->data))->string);
+    li=li->next;
+    TEST_ASSERT_EQUAL(STRING_TYPE,((JsonString *)(li->data))->type);
+    TEST_ASSERT_EQUAL_STRING("ali baba",((JsonString *)(li->data))->string);
 
-    TEST_ASSERT_EQUAL(BOOLEAN_TYPE,((JsonBoolean *)(((Json *)(((JsonElement *)(object->list.head->data))->value))->list.head->next->next->data))->type);
-    TEST_ASSERT_EQUAL(false,((JsonBoolean *)(((Json *)(((JsonElement *)(object->list.head->data))->value))->list.head->next->next->data))->boolean);
+    li=li->next;
+    TEST_ASSERT_EQUAL(BOOLEAN_TYPE,((JsonBoolean *)(li->data))->type);
+    TEST_ASSERT_EQUAL(false,((JsonBoolean *)(li->data))->boolean);
 
-    TEST_ASSERT_EQUAL(NULL,((Json *)(((JsonElement *)(object->list.tail->data))->value))->list.head->next->next->next);
+    TEST_ASSERT_EQUAL(NULL,li->next);
 
   }
   Catch(e){
@@ -1097,23 +1152,30 @@ void test_given_an_element_with_array_data___2_layer_array(void){
     tokenizer=createTokenizer(jsonText);
     Json *object=simpleJsonParser(tokenizer);
 
-    TEST_ASSERT_EQUAL(ELEMENT_TYPE,((JsonElement *)(object->list.head->data))->type);
-    TEST_ASSERT_EQUAL_STRING("array data test",((JsonElement *)(object->list.head->data))->name);
+    ListItem *li;
+    li=object->list.head;
+    TEST_ASSERT_EQUAL(ELEMENT_TYPE,((JsonElement *)(li->data))->type);
+    TEST_ASSERT_EQUAL_STRING("array data test",((JsonElement *)(li->data))->name);
 
-    TEST_ASSERT_EQUAL(NULL,object->list.head->next);
+    TEST_ASSERT_EQUAL(NULL,li->next);
 
-    TEST_ASSERT_EQUAL(ARRAY_TYPE,((Json *)(((JsonElement *)(object->list.head->data))->value))->type);
-    TEST_ASSERT_EQUAL(1,((Json *)(((JsonElement *)(object->list.head->data))->value))->list.count);
+    TEST_ASSERT_EQUAL(ARRAY_TYPE,((Json *)(((JsonElement *)(li->data))->value))->type);
+    TEST_ASSERT_EQUAL(1,((Json *)(((JsonElement *)(li->data))->value))->list.count);
 
-    TEST_ASSERT_EQUAL(NULL,((Json *)(((JsonElement *)(object->list.tail->data))->value))->list.head->next);
+    ListItem *li2;
+    li2=object->list.tail;
+    li2=((Json *)(((JsonElement *)(li2->data))->value))->list.head;
+    TEST_ASSERT_EQUAL(NULL,li2->next);
 
-    TEST_ASSERT_EQUAL(ARRAY_TYPE,((Json *)(((Json *)(((JsonElement *)(object->list.head->data))->value))->list.head->data))->type);
-    TEST_ASSERT_EQUAL(1,((Json *)(((Json *)(((JsonElement *)(object->list.head->data))->value))->list.head->data))->list.count);
+    li=((Json *)(((JsonElement *)(li->data))->value))->list.head;
+    TEST_ASSERT_EQUAL(ARRAY_TYPE,((Json *)(li->data))->type);
+    TEST_ASSERT_EQUAL(1,((Json *)(li->data))->list.count);
 
-    TEST_ASSERT_EQUAL(NULL,((Json *)(((Json *)(((JsonElement *)(object->list.head->data))->value))->list.head->data))->list.head->next);
+    TEST_ASSERT_EQUAL(NULL,((Json *)(li->data))->list.head->next);
 
-    TEST_ASSERT_EQUAL(NUMBER_TYPE,((JsonNumber *)(((Json *)(((Json *)(((JsonElement *)(object->list.head->data))->value))->list.head->data))->list.head->data))->type);
-    TEST_ASSERT_EQUAL(22.55,((JsonNumber *)(((Json *)(((Json *)(((JsonElement *)(object->list.head->data))->value))->list.head->data))->list.head->data))->number);
+    li=((Json *)(li->data))->list.head;
+    TEST_ASSERT_EQUAL(NUMBER_TYPE,((JsonNumber *)(li->data))->type);
+    TEST_ASSERT_EQUAL(22.55,((JsonNumber *)(li->data))->number);
 
   }
   Catch(e){
@@ -1137,30 +1199,35 @@ void test_given_an_element_with_multiple_array_data___2_layer_array(void){
     tokenizer=createTokenizer(jsonText);
     Json *object=simpleJsonParser(tokenizer);
 
-    TEST_ASSERT_EQUAL(ELEMENT_TYPE,((JsonElement *)(object->list.head->data))->type);
-    TEST_ASSERT_EQUAL_STRING("array data test",((JsonElement *)(object->list.head->data))->name);
+    ListItem *li;
+    li=object->list.head;
+    TEST_ASSERT_EQUAL(ELEMENT_TYPE,((JsonElement *)(li->data))->type);
+    TEST_ASSERT_EQUAL_STRING("array data test",((JsonElement *)(li->data))->name);
 
-    TEST_ASSERT_EQUAL(NULL,object->list.head->next);
+    TEST_ASSERT_EQUAL(NULL,li->next);
 
-    TEST_ASSERT_EQUAL(ARRAY_TYPE,((Json *)(((JsonElement *)(object->list.head->data))->value))->type);
-    TEST_ASSERT_EQUAL(1,((Json *)(((JsonElement *)(object->list.head->data))->value))->list.count);
+    TEST_ASSERT_EQUAL(ARRAY_TYPE,((Json *)(((JsonElement *)(li->data))->value))->type);
+    TEST_ASSERT_EQUAL(1,((Json *)(((JsonElement *)(li->data))->value))->list.count);
 
-    TEST_ASSERT_EQUAL(NULL,((Json *)(((JsonElement *)(object->list.tail->data))->value))->list.head->next);
+    TEST_ASSERT_EQUAL(NULL,li->next);
 
-    TEST_ASSERT_EQUAL(ARRAY_TYPE,((Json *)(((Json *)(((JsonElement *)(object->list.head->data))->value))->list.head->data))->type);
-    TEST_ASSERT_EQUAL(3,((Json *)(((Json *)(((JsonElement *)(object->list.head->data))->value))->list.head->data))->list.count);
+    li=((Json *)(((JsonElement *)(li->data))->value))->list.head;
+    TEST_ASSERT_EQUAL(ARRAY_TYPE,((Json *)(li->data))->type);
+    TEST_ASSERT_EQUAL(3,((Json *)(li->data))->list.count);
 
-    TEST_ASSERT_EQUAL(NULL,((Json *)(((Json *)(((JsonElement *)(object->list.head->data))->value))->list.head->data))->list.head->next->next->next);
+    li=((Json *)(li->data))->list.head;
+    TEST_ASSERT_EQUAL(NUMBER_TYPE,((JsonNumber *)(li->data))->type);
+    TEST_ASSERT_EQUAL(22.55,((JsonNumber *)(li->data))->number);
 
-    TEST_ASSERT_EQUAL(NUMBER_TYPE,((JsonNumber *)(((Json *)(((Json *)(((JsonElement *)(object->list.head->data))->value))->list.head->data))->list.head->data))->type);
-    TEST_ASSERT_EQUAL(22.55,((JsonNumber *)(((Json *)(((Json *)(((JsonElement *)(object->list.head->data))->value))->list.head->data))->list.head->data))->number);
+    li=li->next;
+    TEST_ASSERT_EQUAL(STRING_TYPE,((JsonString *)(li->data))->type);
+    TEST_ASSERT_EQUAL_STRING("epic array test",((JsonString *)(li->data))->string);
 
-    TEST_ASSERT_EQUAL(STRING_TYPE,((JsonString *)(((Json *)(((Json *)(((JsonElement *)(object->list.head->data))->value))->list.head->data))->list.head->next->data))->type);
-    TEST_ASSERT_EQUAL_STRING("epic array test",((JsonString *)(((Json *)(((Json *)(((JsonElement *)(object->list.head->data))->value))->list.head->data))->list.head->next->data))->string);
+    li=li->next;
+    TEST_ASSERT_EQUAL(BOOLEAN_TYPE,((JsonBoolean *)(li->data))->type);
+    TEST_ASSERT_EQUAL(false,((JsonBoolean *)(li->data))->boolean);
 
-    TEST_ASSERT_EQUAL(BOOLEAN_TYPE,((JsonBoolean *)(((Json *)(((Json *)(((JsonElement *)(object->list.head->data))->value))->list.head->data))->list.tail->data))->type);
-    TEST_ASSERT_EQUAL(false,((JsonBoolean *)(((Json *)(((Json *)(((JsonElement *)(object->list.head->data))->value))->list.head->data))->list.tail->data))->boolean);
-
+    TEST_ASSERT_EQUAL(NULL,li->next);
   }
   Catch(e){
     dumpTokenErrorMessage(e, 1);
@@ -1184,29 +1251,35 @@ void test_given_an_element_with_multiple_array_data___2_layer_array____1_data_in
     tokenizer=createTokenizer(jsonText);
     Json *object=simpleJsonParser(tokenizer);
 
-    TEST_ASSERT_EQUAL(ELEMENT_TYPE,((JsonElement *)(object->list.head->data))->type);
-    TEST_ASSERT_EQUAL_STRING("array test",((JsonElement *)(object->list.head->data))->name);
+    ListItem *li;
+    li=object->list.head;
+    TEST_ASSERT_EQUAL(ELEMENT_TYPE,((JsonElement *)(li->data))->type);
+    TEST_ASSERT_EQUAL_STRING("array test",((JsonElement *)(li->data))->name);
 
-    TEST_ASSERT_EQUAL(NULL,object->list.head->next);
+    TEST_ASSERT_EQUAL(NULL,li->next);
 
-    TEST_ASSERT_EQUAL(ARRAY_TYPE,((Json *)(((JsonElement *)(object->list.head->data))->value))->type);
-    TEST_ASSERT_EQUAL(2,((Json *)(((JsonElement *)(object->list.head->data))->value))->list.count);
+    TEST_ASSERT_EQUAL(ARRAY_TYPE,((Json *)(((JsonElement *)(li->data))->value))->type);
+    TEST_ASSERT_EQUAL(2,((Json *)(((JsonElement *)(li->data))->value))->list.count);
 
-    TEST_ASSERT_EQUAL(NULL,((Json *)(((JsonElement *)(object->list.tail->data))->value))->list.head->next->next);
+    li=((Json *)(((JsonElement *)(li->data))->value))->list.head;
+    TEST_ASSERT_EQUAL(NUMBER_TYPE,((JsonNumber *)(li->data))->type);
+    TEST_ASSERT_EQUAL(22.55,((JsonNumber *)(li->data))->number);
 
-    TEST_ASSERT_EQUAL(NUMBER_TYPE,((JsonNumber *)(((Json *)(((JsonElement *)(object->list.head->data))->value))->list.head->data))->type);
-    TEST_ASSERT_EQUAL(22.55,((JsonNumber *)(((Json *)(((JsonElement *)(object->list.head->data))->value))->list.head->data))->number);
+    li=li->next;
+    TEST_ASSERT_EQUAL(ARRAY_TYPE,((Json *)(li->data))->type);
+    TEST_ASSERT_EQUAL(2,((Json *)(li->data))->list.count);
 
-    TEST_ASSERT_EQUAL(ARRAY_TYPE,((Json *)(((Json *)(((JsonElement *)(object->list.head->data))->value))->list.tail->data))->type);
-    TEST_ASSERT_EQUAL(2,((Json *)(((Json *)(((JsonElement *)(object->list.head->data))->value))->list.tail->data))->list.count);
+    TEST_ASSERT_EQUAL(NULL,li->next);
 
-    TEST_ASSERT_EQUAL(NULL,((Json *)(((Json *)(((JsonElement *)(object->list.head->data))->value))->list.tail->data))->list.head->next->next);
+    li=((Json *)(li->data))->list.head;
+    TEST_ASSERT_EQUAL(STRING_TYPE,((JsonString *)(li->data))->type);
+    TEST_ASSERT_EQUAL_STRING("epic array test",((JsonString *)(li->data))->string);
 
-    TEST_ASSERT_EQUAL(STRING_TYPE,((JsonString *)(((Json *)(((Json *)(((JsonElement *)(object->list.head->data))->value))->list.tail->data))->list.head->data))->type);
-    TEST_ASSERT_EQUAL_STRING("epic array test",((JsonString *)(((Json *)(((Json *)(((JsonElement *)(object->list.head->data))->value))->list.tail->data))->list.head->data))->string);
+    li=li->next;
+    TEST_ASSERT_EQUAL(BOOLEAN_TYPE,((JsonBoolean *)(li->data))->type);
+    TEST_ASSERT_EQUAL(false,((JsonBoolean *)(li->data))->boolean);
 
-    TEST_ASSERT_EQUAL(BOOLEAN_TYPE,((JsonBoolean *)(((Json *)(((Json *)(((JsonElement *)(object->list.head->data))->value))->list.tail->data))->list.tail->data))->type);
-    TEST_ASSERT_EQUAL(false,((JsonBoolean *)(((Json *)(((Json *)(((JsonElement *)(object->list.head->data))->value))->list.tail->data))->list.tail->data))->boolean);
+    TEST_ASSERT_EQUAL(NULL,li->next);
   }
   Catch(e){
     dumpTokenErrorMessage(e, 1);
@@ -1230,23 +1303,27 @@ void test_given_an_element_with_multiple_array_data___2_layer_array____1_data_in
     tokenizer=createTokenizer(jsonText);
     Json *object=simpleJsonParser(tokenizer);
 
-    TEST_ASSERT_EQUAL(ELEMENT_TYPE,((JsonElement *)(object->list.head->data))->type);
-    TEST_ASSERT_EQUAL_STRING("array test",((JsonElement *)(object->list.head->data))->name);
+    ListItem *li;
+    li=object->list.head;
+    TEST_ASSERT_EQUAL(ELEMENT_TYPE,((JsonElement *)(li->data))->type);
+    TEST_ASSERT_EQUAL_STRING("array test",((JsonElement *)(li->data))->name);
 
-    TEST_ASSERT_EQUAL(NULL,object->list.head->next);
+    TEST_ASSERT_EQUAL(NULL,li->next);
 
-    TEST_ASSERT_EQUAL(ARRAY_TYPE,((Json *)(((JsonElement *)(object->list.head->data))->value))->type);
-    TEST_ASSERT_EQUAL(2,((Json *)(((JsonElement *)(object->list.head->data))->value))->list.count);
+    TEST_ASSERT_EQUAL(ARRAY_TYPE,((Json *)(((JsonElement *)(li->data))->value))->type);
+    TEST_ASSERT_EQUAL(2,((Json *)(((JsonElement *)(li->data))->value))->list.count);
 
-    TEST_ASSERT_EQUAL(NULL,((Json *)(((JsonElement *)(object->list.tail->data))->value))->list.tail->next);
+    li=((Json *)(((JsonElement *)(li->data))->value))->list.head;
+    TEST_ASSERT_EQUAL(NUMBER_TYPE,((JsonNumber *)(li->data))->type);
+    TEST_ASSERT_EQUAL(22.55,((JsonNumber *)(li->data))->number);
 
-    TEST_ASSERT_EQUAL(NUMBER_TYPE,((JsonNumber *)(((Json *)(((JsonElement *)(object->list.head->data))->value))->list.head->data))->type);
-    TEST_ASSERT_EQUAL(22.55,((JsonNumber *)(((Json *)(((JsonElement *)(object->list.head->data))->value))->list.head->data))->number);
+    li=li->next;
+    TEST_ASSERT_EQUAL(ARRAY_TYPE,((Json *)(li->data))->type);
+    TEST_ASSERT_EQUAL(0,((Json *)(li->data))->list.count);
 
-    TEST_ASSERT_EQUAL(ARRAY_TYPE,((Json *)(((Json *)(((JsonElement *)(object->list.head->data))->value))->list.tail->data))->type);
-    TEST_ASSERT_EQUAL(0,((Json *)(((Json *)(((JsonElement *)(object->list.head->data))->value))->list.tail->data))->list.count);
+    TEST_ASSERT_EQUAL(NULL,li->next);
 
-    TEST_ASSERT_EQUAL(NULL,((Json *)(((Json *)(((JsonElement *)(object->list.head->data))->value))->list.tail->data))->list.head);
+    TEST_ASSERT_EQUAL(NULL,((Json *)(li->data))->list.head);
   }
   Catch(e){
     dumpTokenErrorMessage(e, 1);
@@ -1269,35 +1346,41 @@ void test_given_an_element_with_multiple_array_data_____1_data_in_first_layer_ar
     tokenizer=createTokenizer(jsonText);
     Json *object=simpleJsonParser(tokenizer);
 
-    TEST_ASSERT_EQUAL(ELEMENT_TYPE,((JsonElement *)(object->list.head->data))->type);
-    TEST_ASSERT_EQUAL_STRING("array test",((JsonElement *)(object->list.head->data))->name);
+    ListItem *li;
+    li=object->list.head;
+    TEST_ASSERT_EQUAL(ELEMENT_TYPE,((JsonElement *)(li->data))->type);
+    TEST_ASSERT_EQUAL_STRING("array test",((JsonElement *)(li->data))->name);
 
-    TEST_ASSERT_EQUAL(NULL,object->list.head->next);
+    TEST_ASSERT_EQUAL(NULL,li->next);
 
-    TEST_ASSERT_EQUAL(ARRAY_TYPE,((Json *)(((JsonElement *)(object->list.head->data))->value))->type);
-    TEST_ASSERT_EQUAL(2,((Json *)(((JsonElement *)(object->list.head->data))->value))->list.count);
+    TEST_ASSERT_EQUAL(ARRAY_TYPE,((Json *)(((JsonElement *)(li->data))->value))->type);
+    TEST_ASSERT_EQUAL(2,((Json *)(((JsonElement *)(li->data))->value))->list.count);
 
-    TEST_ASSERT_EQUAL(NULL,((Json *)(((JsonElement *)(object->list.tail->data))->value))->list.tail->next);
+    li=((Json *)(((JsonElement *)(li->data))->value))->list.head;
+    TEST_ASSERT_EQUAL(NUMBER_TYPE,((JsonNumber *)(li->data))->type);
+    TEST_ASSERT_EQUAL(22.55,((JsonNumber *)(li->data))->number);
 
-    TEST_ASSERT_EQUAL(NUMBER_TYPE,((JsonNumber *)(((Json *)(((JsonElement *)(object->list.head->data))->value))->list.head->data))->type);
-    TEST_ASSERT_EQUAL(22.55,((JsonNumber *)(((Json *)(((JsonElement *)(object->list.head->data))->value))->list.head->data))->number);
+    li=li->next;
+    TEST_ASSERT_EQUAL(OBJECT_TYPE,((Json *)(li->data))->type);
+    TEST_ASSERT_EQUAL(2,((Json *)(li->data))->list.count);
 
-    TEST_ASSERT_EQUAL(OBJECT_TYPE,((Json *)(((Json *)(((JsonElement *)(object->list.head->data))->value))->list.tail->data))->type);
-    TEST_ASSERT_EQUAL(2,((Json *)(((Json *)(((JsonElement *)(object->list.head->data))->value))->list.tail->data))->list.count);
+    TEST_ASSERT_EQUAL(NULL,li->next);
 
-    TEST_ASSERT_EQUAL(NULL,((Json *)(((Json *)(((JsonElement *)(object->list.head->data))->value))->list.tail->data))->list.tail->next);
+    li=((Json *)(li->data))->list.head;
+    TEST_ASSERT_EQUAL(ELEMENT_TYPE,((JsonElement *)(li->data))->type);
+    TEST_ASSERT_EQUAL_STRING("element 1",((JsonElement *)(li->data))->name);
 
-    TEST_ASSERT_EQUAL(ELEMENT_TYPE,((JsonElement *)(((Json *)(((Json *)(((JsonElement *)(object->list.head->data))->value))->list.tail->data))->list.head->data))->type);
-    TEST_ASSERT_EQUAL_STRING("element 1",((JsonElement *)(((Json *)(((Json *)(((JsonElement *)(object->list.head->data))->value))->list.tail->data))->list.head->data))->name);
+    TEST_ASSERT_EQUAL(STRING_TYPE,((JsonString *)(((JsonElement *)(li->data))->value))->type);
+    TEST_ASSERT_EQUAL_STRING("epic array test",((JsonString *)(((JsonElement *)(li->data))->value))->string);
 
-    TEST_ASSERT_EQUAL(ELEMENT_TYPE,((JsonElement *)(((Json *)(((Json *)(((JsonElement *)(object->list.head->data))->value))->list.tail->data))->list.tail->data))->type);
-    TEST_ASSERT_EQUAL_STRING("element 2",((JsonElement *)(((Json *)(((Json *)(((JsonElement *)(object->list.head->data))->value))->list.tail->data))->list.tail->data))->name);
+    li=li->next;
+    TEST_ASSERT_EQUAL(ELEMENT_TYPE,((JsonElement *)(li->data))->type);
+    TEST_ASSERT_EQUAL_STRING("element 2",((JsonElement *)(li->data))->name);
 
-    TEST_ASSERT_EQUAL(STRING_TYPE,((JsonString *)(((JsonElement *)(((Json *)(((Json *)(((JsonElement *)(object->list.head->data))->value))->list.tail->data))->list.head->data))->value))->type);
-    TEST_ASSERT_EQUAL_STRING("epic array test",((JsonString *)(((JsonElement *)(((Json *)(((Json *)(((JsonElement *)(object->list.head->data))->value))->list.tail->data))->list.head->data))->value))->string);
+    TEST_ASSERT_EQUAL(BOOLEAN_TYPE,((JsonBoolean *)(((JsonElement *)(li->data))->value))->type);
+    TEST_ASSERT_EQUAL(false,((JsonBoolean *)(((JsonElement *)(li->data))->value))->boolean);
 
-    TEST_ASSERT_EQUAL(BOOLEAN_TYPE,((JsonBoolean *)(((JsonElement *)(((Json *)(((Json *)(((JsonElement *)(object->list.head->data))->value))->list.tail->data))->list.tail->data))->value))->type);
-    TEST_ASSERT_EQUAL(false,((JsonBoolean *)(((JsonElement *)(((Json *)(((Json *)(((JsonElement *)(object->list.head->data))->value))->list.tail->data))->list.tail->data))->value))->boolean);
+    TEST_ASSERT_EQUAL(NULL,li->next);
   }
   Catch(e){
     dumpTokenErrorMessage(e, 1);
@@ -1321,26 +1404,30 @@ void test_given_an_element_with_multiple_data____recursive_of_object(void){
     tokenizer=createTokenizer(jsonText);
     Json *object=simpleJsonParser(tokenizer);
 
-    TEST_ASSERT_EQUAL(ELEMENT_TYPE,((JsonElement *)(object->list.head->data))->type);
-    TEST_ASSERT_EQUAL_STRING("array test",((JsonElement *)(object->list.head->data))->name);
+    ListItem *li;
+    li=object->list.head;
+    TEST_ASSERT_EQUAL(ELEMENT_TYPE,((JsonElement *)(li->data))->type);
+    TEST_ASSERT_EQUAL_STRING("array test",((JsonElement *)(li->data))->name);
 
-    TEST_ASSERT_EQUAL(NULL,object->list.head->next);
+    TEST_ASSERT_EQUAL(NULL,li->next);
 
-    TEST_ASSERT_EQUAL(OBJECT_TYPE,((Json *)(((JsonElement *)(object->list.head->data))->value))->type);
-    TEST_ASSERT_EQUAL(2,((Json *)(((JsonElement *)(object->list.head->data))->value))->list.count);
+    TEST_ASSERT_EQUAL(OBJECT_TYPE,((Json *)(((JsonElement *)(li->data))->value))->type);
+    TEST_ASSERT_EQUAL(2,((Json *)(((JsonElement *)(li->data))->value))->list.count);
 
-    TEST_ASSERT_EQUAL(NULL,((Json *)(((JsonElement *)(object->list.tail->data))->value))->list.tail->next);
+    li=((Json *)(((JsonElement *)(li->data))->value))->list.head;
+    TEST_ASSERT_EQUAL(ELEMENT_TYPE,((JsonElement *)(li->data))->type);
+    TEST_ASSERT_EQUAL_STRING("element 1",((JsonElement *)(li->data))->name);
 
-    TEST_ASSERT_EQUAL(ELEMENT_TYPE,((JsonElement *)(((Json *)(((JsonElement *)(object->list.head->data))->value))->list.head->data))->type);
-    TEST_ASSERT_EQUAL_STRING("element 1",((JsonElement *)(((Json *)(((JsonElement *)(object->list.head->data))->value))->list.head->data))->name);
+    TEST_ASSERT_EQUAL(STRING_TYPE,((JsonString *)(((JsonElement *)(li->data))->value))->type);
+    TEST_ASSERT_EQUAL_STRING("epic array test",((JsonString *)(((JsonElement *)(li->data))->value))->string);
 
-    TEST_ASSERT_EQUAL(STRING_TYPE,((JsonString *)(((JsonElement *)(((Json *)(((JsonElement *)(object->list.head->data))->value))->list.head->data))->value))->type);
-    TEST_ASSERT_EQUAL_STRING("epic array test",((JsonString *)(((JsonElement *)(((Json *)(((JsonElement *)(object->list.head->data))->value))->list.head->data))->value))->string);
+    li=li->next;
+    TEST_ASSERT_EQUAL(ELEMENT_TYPE,((JsonElement *)(li->data))->type);
+    TEST_ASSERT_EQUAL_STRING("element 2",((JsonElement *)(li->data))->name);
 
-    TEST_ASSERT_EQUAL(ELEMENT_TYPE,((JsonElement *)(((Json *)(((JsonElement *)(object->list.head->data))->value))->list.tail->data))->type);
-    TEST_ASSERT_EQUAL_STRING("element 2",((JsonElement *)(((Json *)(((JsonElement *)(object->list.head->data))->value))->list.tail->data))->name);
+    TEST_ASSERT_EQUAL(NULL_TYPE,((JsonNull *)(((JsonElement *)(li->data))->value))->type);
 
-    TEST_ASSERT_EQUAL(NULL_TYPE,((JsonNull *)(((JsonElement *)(((Json *)(((JsonElement *)(object->list.head->data))->value))->list.tail->data))->value))->type);
+    TEST_ASSERT_EQUAL(NULL,li->next);
   }
   Catch(e){
     dumpTokenErrorMessage(e, 1);
@@ -1363,34 +1450,40 @@ void test_given_an_element_with_multiple_data____recursive_of_object__then__recu
     tokenizer=createTokenizer(jsonText);
     Json *object=simpleJsonParser(tokenizer);
 
-    TEST_ASSERT_EQUAL(ELEMENT_TYPE,((JsonElement *)(object->list.head->data))->type);
-    TEST_ASSERT_EQUAL_STRING("array test",((JsonElement *)(object->list.head->data))->name);
+    ListItem *li;
+    li=object->list.head;
+    TEST_ASSERT_EQUAL(ELEMENT_TYPE,((JsonElement *)(li->data))->type);
+    TEST_ASSERT_EQUAL_STRING("array test",((JsonElement *)(li->data))->name);
 
-    TEST_ASSERT_EQUAL(NULL,object->list.head->next);
+    TEST_ASSERT_EQUAL(NULL,li->next);
 
-    TEST_ASSERT_EQUAL(OBJECT_TYPE,((Json *)(((JsonElement *)(object->list.head->data))->value))->type);
-    TEST_ASSERT_EQUAL(2,((Json *)(((JsonElement *)(object->list.head->data))->value))->list.count);
+    TEST_ASSERT_EQUAL(OBJECT_TYPE,((Json *)(((JsonElement *)(li->data))->value))->type);
+    TEST_ASSERT_EQUAL(2,((Json *)(((JsonElement *)(li->data))->value))->list.count);
 
-    TEST_ASSERT_EQUAL(NULL,((Json *)(((JsonElement *)(object->list.tail->data))->value))->list.tail->next);
+    li=((Json *)(((JsonElement *)(li->data))->value))->list.head;
+    TEST_ASSERT_EQUAL(ELEMENT_TYPE,((JsonElement *)(li->data))->type);
+    TEST_ASSERT_EQUAL_STRING("element 1",((JsonElement *)(li->data))->name);
 
-    TEST_ASSERT_EQUAL(ELEMENT_TYPE,((JsonElement *)(((Json *)(((JsonElement *)(object->list.head->data))->value))->list.head->data))->type);
-    TEST_ASSERT_EQUAL_STRING("element 1",((JsonElement *)(((Json *)(((JsonElement *)(object->list.head->data))->value))->list.head->data))->name);
+    TEST_ASSERT_EQUAL(STRING_TYPE,((JsonString *)(((JsonElement *)(li->data))->value))->type);
+    TEST_ASSERT_EQUAL_STRING("epic array test",((JsonString *)(((JsonElement *)(li->data))->value))->string);
 
-    TEST_ASSERT_EQUAL(STRING_TYPE,((JsonString *)(((JsonElement *)(((Json *)(((JsonElement *)(object->list.head->data))->value))->list.head->data))->value))->type);
-    TEST_ASSERT_EQUAL_STRING("epic array test",((JsonString *)(((JsonElement *)(((Json *)(((JsonElement *)(object->list.head->data))->value))->list.head->data))->value))->string);
+    li=li->next;
+    TEST_ASSERT_EQUAL(ELEMENT_TYPE,((JsonElement *)(li->data))->type);
+    TEST_ASSERT_EQUAL_STRING("element 2",((JsonElement *)(li->data))->name);
 
-    TEST_ASSERT_EQUAL(ELEMENT_TYPE,((JsonElement *)(((Json *)(((JsonElement *)(object->list.head->data))->value))->list.tail->data))->type);
-    TEST_ASSERT_EQUAL_STRING("element 2",((JsonElement *)(((Json *)(((JsonElement *)(object->list.head->data))->value))->list.tail->data))->name);
+    TEST_ASSERT_EQUAL(ARRAY_TYPE,((Json *)(((JsonElement *)(li->data))->value))->type);
+    TEST_ASSERT_EQUAL(2,((Json *)(((JsonElement *)(li->data))->value))->list.count);
 
-    TEST_ASSERT_EQUAL(ARRAY_TYPE,((Json *)(((JsonElement *)(((Json *)(((JsonElement *)(object->list.head->data))->value))->list.tail->data))->value))->type);
-    TEST_ASSERT_EQUAL(2,((Json *)(((JsonElement *)(((Json *)(((JsonElement *)(object->list.head->data))->value))->list.tail->data))->value))->list.count);
+    TEST_ASSERT_EQUAL(NULL,li->next);
 
-    TEST_ASSERT_EQUAL(NULL,((Json *)(((JsonElement *)(((Json *)(((JsonElement *)(object->list.head->data))->value))->list.tail->data))->value))->list.tail->next);
+    li=((Json *)(((JsonElement *)(li->data))->value))->list.head;
+    TEST_ASSERT_EQUAL(NULL_TYPE,((JsonNull *)(li->data))->type);
 
-    TEST_ASSERT_EQUAL(NULL_TYPE,((JsonNull *)(((Json *)(((JsonElement *)(((Json *)(((JsonElement *)(object->list.head->data))->value))->list.tail->data))->value))->list.head->data))->type);
+    li=li->next;
+    TEST_ASSERT_EQUAL(NUMBER_TYPE,((JsonNumber *)(li->data))->type);
+    TEST_ASSERT_EQUAL(22.3,((JsonNumber *)(li->data))->number);
 
-    TEST_ASSERT_EQUAL(NUMBER_TYPE,((JsonNumber *)(((Json *)(((JsonElement *)(((Json *)(((JsonElement *)(object->list.head->data))->value))->list.tail->data))->value))->list.tail->data))->type);
-    TEST_ASSERT_EQUAL(22.3,((JsonNumber *)(((Json *)(((JsonElement *)(((Json *)(((JsonElement *)(object->list.head->data))->value))->list.tail->data))->value))->list.tail->data))->number);
+    TEST_ASSERT_EQUAL(NULL,li->next);
   }
   Catch(e){
     dumpTokenErrorMessage(e, 1);
@@ -1485,19 +1578,24 @@ void test_createObjectOrArrayOrDataInsideArrayAccordingToTokenizer(void){
       element=createJsonElement(elementtoken->str, (void *)(array));
       addElementIntoObject(&object,element);
 
-      TEST_ASSERT_EQUAL(ELEMENT_TYPE,((JsonElement *)(object.list.head->data))->type);
+      ListItem *li;
+      li=object.list.head;
+      TEST_ASSERT_EQUAL(ELEMENT_TYPE,((JsonElement *)(li->data))->type);
 
-      TEST_ASSERT_EQUAL(ARRAY_TYPE,((Json *)(((JsonElement *)(object.list.head->data))->value))->type);
-      TEST_ASSERT_EQUAL(3,((Json *)(((JsonElement *)(object.list.head->data))->value))->list.count);
+      TEST_ASSERT_EQUAL(ARRAY_TYPE,((Json *)(((JsonElement *)(li->data))->value))->type);
+      TEST_ASSERT_EQUAL(3,((Json *)(((JsonElement *)(li->data))->value))->list.count);
 
-      TEST_ASSERT_EQUAL(NUMBER_TYPE,((JsonNumber *)(((Json *)(((JsonElement *)(object.list.head->data))->value))->list.head->data))->type);
-      TEST_ASSERT_EQUAL(22.55,((JsonNumber *)(((Json *)(((JsonElement *)(object.list.head->data))->value))->list.head->data))->number);
+      li=((Json *)(((JsonElement *)(li->data))->value))->list.head;
+      TEST_ASSERT_EQUAL(NUMBER_TYPE,((JsonNumber *)(li->data))->type);
+      TEST_ASSERT_EQUAL(22.55,((JsonNumber *)(li->data))->number);
 
-      TEST_ASSERT_EQUAL(STRING_TYPE,((JsonString *)(((Json *)(((JsonElement *)(object.list.head->data))->value))->list.head->next->data))->type);
-      TEST_ASSERT_EQUAL_STRING("epic array test",((JsonString *)(((Json *)(((JsonElement *)(object.list.head->data))->value))->list.head->next->data))->string);
+      li=li->next;
+      TEST_ASSERT_EQUAL(STRING_TYPE,((JsonString *)(li->data))->type);
+      TEST_ASSERT_EQUAL_STRING("epic array test",((JsonString *)(li->data))->string);
 
-      TEST_ASSERT_EQUAL(BOOLEAN_TYPE,((JsonBoolean *)(((Json *)(((JsonElement *)(object.list.head->data))->value))->list.head->next->next->data))->type);
-      TEST_ASSERT_EQUAL(false,((JsonBoolean *)(((Json *)(((JsonElement *)(object.list.head->data))->value))->list.head->next->next->data))->boolean);
+      li=li->next;
+      TEST_ASSERT_EQUAL(BOOLEAN_TYPE,((JsonBoolean *)(li->data))->type);
+      TEST_ASSERT_EQUAL(false,((JsonBoolean *)(li->data))->boolean);
 
     }
     Catch(e){
@@ -1524,17 +1622,21 @@ void test_createObjectOrArrayOrDataInsideArrayAccordingToTokenizer___two_layer_a
       element=createJsonElement(elementtoken->str, (void *)(array));
       addElementIntoObject(&object,element);
 
-      TEST_ASSERT_EQUAL(ELEMENT_TYPE,((JsonElement *)(object.list.head->data))->type);
-      TEST_ASSERT_EQUAL_STRING("array test",((JsonElement *)(object.list.head->data))->name);
+      ListItem *li;
+      li=object.list.head;
+      TEST_ASSERT_EQUAL(ELEMENT_TYPE,((JsonElement *)(li->data))->type);
+      TEST_ASSERT_EQUAL_STRING("array test",((JsonElement *)(li->data))->name);
 
-      TEST_ASSERT_EQUAL(ARRAY_TYPE,((Json *)(((JsonElement *)(object.list.head->data))->value))->type);
-      TEST_ASSERT_EQUAL(1,((Json *)(((JsonElement *)(object.list.head->data))->value))->list.count);
+      TEST_ASSERT_EQUAL(ARRAY_TYPE,((Json *)(((JsonElement *)(li->data))->value))->type);
+      TEST_ASSERT_EQUAL(1,((Json *)(((JsonElement *)(li->data))->value))->list.count);
 
-      TEST_ASSERT_EQUAL(ARRAY_TYPE,((Json *)(((Json *)(((JsonElement *)(object.list.head->data))->value))->list.head->data))->type);
-      TEST_ASSERT_EQUAL(1,((Json *)(((Json *)(((JsonElement *)(object.list.head->data))->value))->list.head->data))->list.count);
+      li=((Json *)(((JsonElement *)(li->data))->value))->list.head;
+      TEST_ASSERT_EQUAL(ARRAY_TYPE,((Json *)(li->data))->type);
+      TEST_ASSERT_EQUAL(1,((Json *)(li->data))->list.count);
 
-      TEST_ASSERT_EQUAL(NUMBER_TYPE,((JsonNumber *)(((Json *)(((Json *)(((JsonElement *)(object.list.head->data))->value))->list.head->data))->list.head->data))->type);
-      TEST_ASSERT_EQUAL(22.55,((JsonNumber *)(((Json *)(((Json *)(((JsonElement *)(object.list.head->data))->value))->list.head->data))->list.head->data))->number);
+      li=((Json *)(li->data))->list.head;
+      TEST_ASSERT_EQUAL(NUMBER_TYPE,((JsonNumber *)(li->data))->type);
+      TEST_ASSERT_EQUAL(22.55,((JsonNumber *)(li->data))->number);
 
     }
     Catch(e){
@@ -1563,23 +1665,29 @@ void test_createObjectOrArrayOrDataInsideArrayAccordingToTokenizer___two_layer_a
       element=createJsonElement(elementtoken->str, (void *)(array));
       addElementIntoObject(&object,element);
 
-      TEST_ASSERT_EQUAL(ELEMENT_TYPE,((JsonElement *)(object.list.head->data))->type);
-      TEST_ASSERT_EQUAL_STRING("array test",((JsonElement *)(object.list.head->data))->name);
+      ListItem *li;
+      li=object.list.head;
+      TEST_ASSERT_EQUAL(ELEMENT_TYPE,((JsonElement *)(li->data))->type);
+      TEST_ASSERT_EQUAL_STRING("array test",((JsonElement *)(li->data))->name);
 
-      TEST_ASSERT_EQUAL(ARRAY_TYPE,((Json *)(((JsonElement *)(object.list.head->data))->value))->type);
-      TEST_ASSERT_EQUAL(1,((Json *)(((JsonElement *)(object.list.head->data))->value))->list.count);
+      TEST_ASSERT_EQUAL(ARRAY_TYPE,((Json *)(((JsonElement *)(li->data))->value))->type);
+      TEST_ASSERT_EQUAL(1,((Json *)(((JsonElement *)(li->data))->value))->list.count);
 
-      TEST_ASSERT_EQUAL(ARRAY_TYPE,((Json *)(((Json *)(((JsonElement *)(object.list.head->data))->value))->list.head->data))->type);
-      TEST_ASSERT_EQUAL(3,((Json *)(((Json *)(((JsonElement *)(object.list.head->data))->value))->list.head->data))->list.count);
+      li=((Json *)(((JsonElement *)(li->data))->value))->list.head;
+      TEST_ASSERT_EQUAL(ARRAY_TYPE,((Json *)(li->data))->type);
+      TEST_ASSERT_EQUAL(3,((Json *)(li->data))->list.count);
 
-      TEST_ASSERT_EQUAL(NUMBER_TYPE,((JsonNumber *)(((Json *)(((Json *)(((JsonElement *)(object.list.head->data))->value))->list.head->data))->list.head->data))->type);
-      TEST_ASSERT_EQUAL(22.55,((JsonNumber *)(((Json *)(((Json *)(((JsonElement *)(object.list.head->data))->value))->list.head->data))->list.head->data))->number);
+      li=((Json *)(li->data))->list.head;
+      TEST_ASSERT_EQUAL(NUMBER_TYPE,((JsonNumber *)(li->data))->type);
+      TEST_ASSERT_EQUAL(22.55,((JsonNumber *)(li->data))->number);
 
-      TEST_ASSERT_EQUAL(STRING_TYPE,((JsonString *)(((Json *)(((Json *)(((JsonElement *)(object.list.head->data))->value))->list.head->data))->list.head->next->data))->type);
-      TEST_ASSERT_EQUAL_STRING("epic array test",((JsonString *)(((Json *)(((Json *)(((JsonElement *)(object.list.head->data))->value))->list.head->data))->list.head->next->data))->string);
+      li=li->next;
+      TEST_ASSERT_EQUAL(STRING_TYPE,((JsonString *)(li->data))->type);
+      TEST_ASSERT_EQUAL_STRING("epic array test",((JsonString *)(li->data))->string);
 
-      TEST_ASSERT_EQUAL(BOOLEAN_TYPE,((JsonBoolean *)(((Json *)(((Json *)(((JsonElement *)(object.list.head->data))->value))->list.head->data))->list.tail->data))->type);
-      TEST_ASSERT_EQUAL(false,((JsonBoolean *)(((Json *)(((Json *)(((JsonElement *)(object.list.head->data))->value))->list.head->data))->list.tail->data))->boolean);
+      li=li->next;
+      TEST_ASSERT_EQUAL(BOOLEAN_TYPE,((JsonBoolean *)(li->data))->type);
+      TEST_ASSERT_EQUAL(false,((JsonBoolean *)(li->data))->boolean);
     }
     Catch(e){
       dumpTokenErrorMessage(e, 1);
@@ -1606,23 +1714,29 @@ void test_createObjectOrArrayOrDataInsideArrayAccordingToTokenizer___two_layer_a
       element=createJsonElement(elementtoken->str, (void *)(array));
       addElementIntoObject(&object,element);
 
-      TEST_ASSERT_EQUAL(ELEMENT_TYPE,((JsonElement *)(object.list.head->data))->type);
-      TEST_ASSERT_EQUAL_STRING("array test",((JsonElement *)(object.list.head->data))->name);
+      ListItem *li;
+      li=object.list.head;
+      TEST_ASSERT_EQUAL(ELEMENT_TYPE,((JsonElement *)(li->data))->type);
+      TEST_ASSERT_EQUAL_STRING("array test",((JsonElement *)(li->data))->name);
 
-      TEST_ASSERT_EQUAL(ARRAY_TYPE,((Json *)(((JsonElement *)(object.list.head->data))->value))->type);
-      TEST_ASSERT_EQUAL(2,((Json *)(((JsonElement *)(object.list.head->data))->value))->list.count);
+      TEST_ASSERT_EQUAL(ARRAY_TYPE,((Json *)(((JsonElement *)(li->data))->value))->type);
+      TEST_ASSERT_EQUAL(2,((Json *)(((JsonElement *)(li->data))->value))->list.count);
 
-      TEST_ASSERT_EQUAL(NUMBER_TYPE,((JsonNumber *)(((Json *)(((JsonElement *)(object.list.head->data))->value))->list.head->data))->type);
-      TEST_ASSERT_EQUAL(22.55,((JsonNumber *)(((Json *)(((JsonElement *)(object.list.head->data))->value))->list.head->data))->number);
+      li=((Json *)(((JsonElement *)(object.list.head->data))->value))->list.head;
+      TEST_ASSERT_EQUAL(NUMBER_TYPE,((JsonNumber *)(li->data))->type);
+      TEST_ASSERT_EQUAL(22.55,((JsonNumber *)(li->data))->number);
 
-      TEST_ASSERT_EQUAL(ARRAY_TYPE,((Json *)(((Json *)(((JsonElement *)(object.list.head->data))->value))->list.tail->data))->type);
-      TEST_ASSERT_EQUAL(2,((Json *)(((Json *)(((JsonElement *)(object.list.head->data))->value))->list.tail->data))->list.count);
+      li=li->next;
+      TEST_ASSERT_EQUAL(ARRAY_TYPE,((Json *)(li->data))->type);
+      TEST_ASSERT_EQUAL(2,((Json *)(li->data))->list.count);
 
-      TEST_ASSERT_EQUAL(STRING_TYPE,((JsonString *)(((Json *)(((Json *)(((JsonElement *)(object.list.head->data))->value))->list.tail->data))->list.head->data))->type);
-      TEST_ASSERT_EQUAL_STRING("epic array test",((JsonString *)(((Json *)(((Json *)(((JsonElement *)(object.list.head->data))->value))->list.tail->data))->list.head->data))->string);
+      li=((Json *)(li->data))->list.head;
+      TEST_ASSERT_EQUAL(STRING_TYPE,((JsonString *)(li->data))->type);
+      TEST_ASSERT_EQUAL_STRING("epic array test",((JsonString *)(li->data))->string);
 
-      TEST_ASSERT_EQUAL(BOOLEAN_TYPE,((JsonBoolean *)(((Json *)(((Json *)(((JsonElement *)(object.list.head->data))->value))->list.tail->data))->list.tail->data))->type);
-      TEST_ASSERT_EQUAL(false,((JsonBoolean *)(((Json *)(((Json *)(((JsonElement *)(object.list.head->data))->value))->list.tail->data))->list.tail->data))->boolean);
+      li=li->next;
+      TEST_ASSERT_EQUAL(BOOLEAN_TYPE,((JsonBoolean *)(li->data))->type);
+      TEST_ASSERT_EQUAL(false,((JsonBoolean *)(li->data))->boolean);
     }
     Catch(e){
       dumpTokenErrorMessage(e, 1);
@@ -1649,17 +1763,21 @@ void test_createObjectOrArrayOrDataInsideArrayAccordingToTokenizer___two_layer_a
       element=createJsonElement(elementtoken->str, (void *)(array));
       addElementIntoObject(&object,element);
 
-      TEST_ASSERT_EQUAL(ELEMENT_TYPE,((JsonElement *)(object.list.head->data))->type);
-      TEST_ASSERT_EQUAL_STRING("array test",((JsonElement *)(object.list.head->data))->name);
+      ListItem *li;
+      li=object.list.head;
+      TEST_ASSERT_EQUAL(ELEMENT_TYPE,((JsonElement *)(li->data))->type);
+      TEST_ASSERT_EQUAL_STRING("array test",((JsonElement *)(li->data))->name);
 
-      TEST_ASSERT_EQUAL(ARRAY_TYPE,((Json *)(((JsonElement *)(object.list.head->data))->value))->type);
-      TEST_ASSERT_EQUAL(2,((Json *)(((JsonElement *)(object.list.head->data))->value))->list.count);
+      TEST_ASSERT_EQUAL(ARRAY_TYPE,((Json *)(((JsonElement *)(li->data))->value))->type);
+      TEST_ASSERT_EQUAL(2,((Json *)(((JsonElement *)(li->data))->value))->list.count);
 
-      TEST_ASSERT_EQUAL(NUMBER_TYPE,((JsonNumber *)(((Json *)(((JsonElement *)(object.list.head->data))->value))->list.head->data))->type);
-      TEST_ASSERT_EQUAL(22.55,((JsonNumber *)(((Json *)(((JsonElement *)(object.list.head->data))->value))->list.head->data))->number);
+      li=((Json *)(((JsonElement *)(li->data))->value))->list.head;
+      TEST_ASSERT_EQUAL(NUMBER_TYPE,((JsonNumber *)(li->data))->type);
+      TEST_ASSERT_EQUAL(22.55,((JsonNumber *)(li->data))->number);
 
-      TEST_ASSERT_EQUAL(ARRAY_TYPE,((Json *)(((Json *)(((JsonElement *)(object.list.head->data))->value))->list.tail->data))->type);
-      TEST_ASSERT_EQUAL(0,((Json *)(((Json *)(((JsonElement *)(object.list.head->data))->value))->list.tail->data))->list.count);
+      li=li->next;
+      TEST_ASSERT_EQUAL(ARRAY_TYPE,((Json *)(li->data))->type);
+      TEST_ASSERT_EQUAL(0,((Json *)(li->data))->list.count);
 
     }
     Catch(e){
@@ -1685,29 +1803,37 @@ void test_createObjectOrArrayOrDataInsideArrayAccordingToTokenizer___two_layer__
       element=createJsonElement(elementtoken->str, (void *)(array));
       addElementIntoObject(&object,element);
 
-      TEST_ASSERT_EQUAL(ELEMENT_TYPE,((JsonElement *)(object.list.head->data))->type);
-      TEST_ASSERT_EQUAL_STRING("array test",((JsonElement *)(object.list.head->data))->name);
+      ListItem *li;
+      li=object.list.head;
+      TEST_ASSERT_EQUAL(ELEMENT_TYPE,((JsonElement *)(li->data))->type);
+      TEST_ASSERT_EQUAL_STRING("array test",((JsonElement *)(li->data))->name);
 
-      TEST_ASSERT_EQUAL(ARRAY_TYPE,((Json *)(((JsonElement *)(object.list.head->data))->value))->type);
-      TEST_ASSERT_EQUAL(2,((Json *)(((JsonElement *)(object.list.head->data))->value))->list.count);
+      TEST_ASSERT_EQUAL(ARRAY_TYPE,((Json *)(((JsonElement *)(li->data))->value))->type);
+      TEST_ASSERT_EQUAL(2,((Json *)(((JsonElement *)(li->data))->value))->list.count);
 
-      TEST_ASSERT_EQUAL(NUMBER_TYPE,((JsonNumber *)(((Json *)(((JsonElement *)(object.list.head->data))->value))->list.head->data))->type);
-      TEST_ASSERT_EQUAL(22.55,((JsonNumber *)(((Json *)(((JsonElement *)(object.list.head->data))->value))->list.head->data))->number);
+      li=((Json *)(((JsonElement *)(li->data))->value))->list.head;
+      TEST_ASSERT_EQUAL(NUMBER_TYPE,((JsonNumber *)(li->data))->type);
+      TEST_ASSERT_EQUAL(22.55,((JsonNumber *)(li->data))->number);
 
-      TEST_ASSERT_EQUAL(OBJECT_TYPE,((Json *)(((Json *)(((JsonElement *)(object.list.head->data))->value))->list.tail->data))->type);
-      TEST_ASSERT_EQUAL(2,((Json *)(((Json *)(((JsonElement *)(object.list.head->data))->value))->list.tail->data))->list.count);
+      li=li->next;
+      TEST_ASSERT_EQUAL(OBJECT_TYPE,((Json *)(li->data))->type);
+      TEST_ASSERT_EQUAL(2,((Json *)(li->data))->list.count);
 
-      TEST_ASSERT_EQUAL(ELEMENT_TYPE,((JsonElement *)(((Json *)(((Json *)(((JsonElement *)(object.list.head->data))->value))->list.tail->data))->list.head->data))->type);
-      TEST_ASSERT_EQUAL_STRING("element 1",((JsonElement *)(((Json *)(((Json *)(((JsonElement *)(object.list.head->data))->value))->list.tail->data))->list.head->data))->name);
+      li=((Json *)(li->data))->list.head;
+      TEST_ASSERT_EQUAL(ELEMENT_TYPE,((JsonElement *)(li->data))->type);
+      TEST_ASSERT_EQUAL_STRING("element 1",((JsonElement *)(li->data))->name);
 
-      TEST_ASSERT_EQUAL(ELEMENT_TYPE,((JsonElement *)(((Json *)(((Json *)(((JsonElement *)(object.list.head->data))->value))->list.tail->data))->list.tail->data))->type);
-      TEST_ASSERT_EQUAL_STRING("element 2",((JsonElement *)(((Json *)(((Json *)(((JsonElement *)(object.list.head->data))->value))->list.tail->data))->list.tail->data))->name);
+      TEST_ASSERT_EQUAL(STRING_TYPE,((JsonString *)(((JsonElement *)(li->data))->value))->type);
+      TEST_ASSERT_EQUAL_STRING("epic array test",((JsonString *)(((JsonElement *)(li->data))->value))->string);
 
-      TEST_ASSERT_EQUAL(STRING_TYPE,((JsonString *)(((JsonElement *)(((Json *)(((Json *)(((JsonElement *)(object.list.head->data))->value))->list.tail->data))->list.head->data))->value))->type);
-      TEST_ASSERT_EQUAL_STRING("epic array test",((JsonString *)(((JsonElement *)(((Json *)(((Json *)(((JsonElement *)(object.list.head->data))->value))->list.tail->data))->list.head->data))->value))->string);
+      li=li->next;
+      TEST_ASSERT_EQUAL(ELEMENT_TYPE,((JsonElement *)(li->data))->type);
+      TEST_ASSERT_EQUAL_STRING("element 2",((JsonElement *)(li->data))->name);
 
-      TEST_ASSERT_EQUAL(BOOLEAN_TYPE,((JsonBoolean *)(((JsonElement *)(((Json *)(((Json *)(((JsonElement *)(object.list.head->data))->value))->list.tail->data))->list.tail->data))->value))->type);
-      TEST_ASSERT_EQUAL(false,((JsonBoolean *)(((JsonElement *)(((Json *)(((Json *)(((JsonElement *)(object.list.head->data))->value))->list.tail->data))->list.tail->data))->value))->boolean);
+
+
+      TEST_ASSERT_EQUAL(BOOLEAN_TYPE,((JsonBoolean *)(((JsonElement *)(li->data))->value))->type);
+      TEST_ASSERT_EQUAL(false,((JsonBoolean *)(((JsonElement *)(li->data))->value))->boolean);
 
     }
     Catch(e){
